@@ -1,20 +1,18 @@
-# Base image to use
-FROM node:latest
+FROM node:20
 
-# set a working directory
 WORKDIR /src
 
-# Copy across project configuration information
-# Install application dependencies
-COPY package*.json /src/
+# Install build tools required for sqlite3
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
-# Ask npm to install the dependencies
-RUN npm install -g supervisor && npm install && npm install supervisor
+COPY package*.json ./
+RUN npm install
 
-# Copy across all our files
-COPY . /src
+COPY . .
 
-# Expose our application port (3000)
 EXPOSE 3000
-
-
+CMD ["node", "index.js"]

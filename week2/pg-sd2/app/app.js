@@ -12,7 +12,15 @@ const db = require('./services/db');
 
 // Create a route for root - /
 app.get("/", function(req, res) {
-    res.send("Hello world!");
+    res.send("Salam alaikum!");
+});
+
+// route for hello roehampton
+app.get("/roehampton", function(req, res) {
+    let path = req.url;
+    res.send("Salaam roehampton    !   " + path.substring(0,3))
+    console.log(req.url)
+
 });
 
 // Create a route for testing the db
@@ -24,6 +32,8 @@ app.get("/db_test", function(req, res) {
         res.send(results)
     });
 });
+
+
 
 // Create a route for /goodbye
 // Responds to a 'GET' request
