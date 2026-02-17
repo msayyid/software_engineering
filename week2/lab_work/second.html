@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buttons!</title>
+    <script src="script2.js"></script>
+    <script>
+        function msg() {
+            document.write("Hello, you clicked the click me button");
+        }
+
+        function anotherMsg(){
+            document.write("this isn't the one, you cilcked the click me too button now");
+        }
+
+        function change() {
+            document.getElementById("myText").innerHTML = "you clicked me";
+        }
+
+    </script>
+  </head>
+  <body>
+    <h1>
+      Click the button!
+    </h1>
+    <input type="button" value="Click Me!" onclick="msg()"><br><br>
+    <input type="button" value="click me too" onclick="change()">
+
+    <p id="myText">
+        hello world!
+    </p>
+    <script>
+        document.getElementById("myText").textContent = "hello mate";
+    </script>
+  </body>
+</html>

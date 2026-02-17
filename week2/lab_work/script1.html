@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Changing Web Page!</title>
+
+    <!-- <script src="script1.js"></script> -->
+</head>
+<body>
+    <h1>page heading</h1>
+    <div id="content"></div>
+    <script>
+        
+        let name = "Lisa";
+        let age = 21;
+        let teacher = true;
+        // document.write('Name ' + name + '<br>');
+        // document.write('Age' + age + '<br>');
+        // document.write('Is teacher? ' + teacher);
+
+        document.getElementById("content").innerHTML = `${name}, hello` ;
+        document.getElementsByTagName("h1")[0].innerHTML = name;
+        // console.log(name);
+    </script>
+</body>
+</html>
