@@ -15,6 +15,42 @@ app.get("/", function(req, res) {
     res.send("Hello world!3412");
 });
 
+// ex 1, send json 
+app.get("/all-students", function(req, res) {
+    const sql = "select * from students";
+    db.query(sql).then(results => {
+        console.log(results);
+        res.json(results);
+    });
+
+
+});
+
+// ex 2
+app.get("/all-students-formatted", function(req, res) {
+    const sql = "select * from students";
+    let output = "<table border='1'>";
+    db.query(sql).then(results => {
+        for (let row of results) {
+            output += "<tr>"
+            output += "<td>" + row.id + "</td>";
+            output += "<td>" + "<a href='/single-student/" + row.id + "'>" + row.name + "</a></td>";
+            output += "</tr>"
+            console.log(row);
+        }
+        output += "</table>"
+        res.send(output);
+    });
+    // res.send("i worked don't worry");
+});
+
+app.get("/single-student/:id", function(req, res) {
+    let stId = req.params.id;
+    console.log(stId);
+
+    res.send(stId);
+});
+
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
     // Assumes a table called test_table exists in your database
