@@ -1,0 +1,25 @@
+title User Registration Flow
+
+User->Browser: 1. Click "Sign Up"
+Browser->Express Server: 2. GET /register
+Express Server->Browser: 3. Render registration form
+Browser->User: 4. Display form
+User->Browser: 5. Fill form & submit
+Browser->Express Server: 6. POST /register (email, password)
+note over Express Server: 7. Validate input
+note over Express Server: 8. Hash password (bcrypt)
+Express Server->MySQL Database: 9. Check if email exists?
+MySQL Database-->Express Server: 10. Query result
+note over Express Server: 11. Email available?
+Express Server->MySQL Database: 12. INSERT INTO users
+MySQL Database-->Express Server: 13. user_id returned
+note over Express Server: 14. Create session
+note over Express Server: 15. Send verification email
+Express Server->Browser: 16. Redirect to /profile/setup
+Browser->User: 17. Load profile setup page
+User->Browser: 18. Complete profile
+Browser->Express Server: 19. POST /profile (name, bio, location)
+Express Server->MySQL Database: 20. UPDATE users SET...
+MySQL Database-->Express Server: 21. Success
+Express Server->Browser: 22. Redirect to /dashboard
+Browser->User: 23. Display dashboard

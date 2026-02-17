@@ -10,10 +10,26 @@ app.use(express.static("static"));
 // Get the functions in the db.js file to use
 const db = require('./services/db');
 
+// pug templating engine
+app.set('view engine', 'pug');
+app.set('views', './app/views');
+
 // Create a route for root - /
+
 app.get("/", function(req, res) {
-    res.send("Hello world!3412");
+    // set up an rray of data
+    let test_data = ['one', 'two', 'three', 'four'];
+    // send the array through to the template as a variable called data
+    res.render("index", {'title': 'My index page', 'heading':'My heading', 'data':test_data});
 });
+
+// this is pug template test
+// app.get("/", function(req, res){
+//     res.render("index", {"title": "My index page", "heading":"My heading", "paragraph": "this is a new paragraph"});
+// });
+// app.get("/", function(req, res) {
+//     res.send("Hello world!3412");
+// });
 
 // ex 1, send json 
 app.get("/all-students", function(req, res) {
@@ -27,28 +43,54 @@ app.get("/all-students", function(req, res) {
 });
 
 // ex 2
+// app.get("/all-students-formatted", function(req, res) {
+//     const sql = "select * from students";
+//     let output = "<table border='1'>";
+//     db.query(sql).then(results => {
+//         for (let row of results) {
+//             output += "<tr>"
+//             output += "<td>" + row.id + "</td>";
+//             output += "<td>" + "<a href='/single-student/" + row.id + "'>" + row.name + "</a></td>";
+//             output += "</tr>"
+//             console.log(row);
+//         }
+//         output += "</table>"
+//         res.send(output);
+//     });
+//     // res.send("i worked don't worry");
+// });
+
+// refactored all-students-formatted
 app.get("/all-students-formatted", function(req, res) {
-    const sql = "select * from students";
-    let output = "<table border='1'>";
+    let sql = "select * from students";
     db.query(sql).then(results => {
-        for (let row of results) {
-            output += "<tr>"
-            output += "<td>" + row.id + "</td>";
-            output += "<td>" + "<a href='/single-student/" + row.id + "'>" + row.name + "</a></td>";
-            output += "</tr>"
-            console.log(row);
-        }
-        output += "</table>"
-        res.send(output);
+        res.render('all-students', {data: results});
     });
-    // res.send("i worked don't worry");
 });
+
+// this is from week 2
+// app.get("/single-student/:id", function(req, res) {
+//     let stId = req.params.id;
+//     console.log(stId);
+
+//     res.send(stId);
+// });
 
 app.get("/single-student/:id", function(req, res) {
     let stId = req.params.id;
+    const sql = "select * from students where id = ?";
+
+    db.query(sql, [stId]).then(results => {
+        if (results.length > 0) {
+            res.render("single-student", {student: results[0] });
+        }
+        else {
+            res.send("student not found!!!!!");
+        }
+    })
     console.log(stId);
 
-    res.send(stId);
+    // res.send(stId);
 });
 
 // Create a route for testing the db
