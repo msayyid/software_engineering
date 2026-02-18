@@ -20,6 +20,7 @@ app.get("/roehampton", function(req, res) {
     console.log(req.url);
 
     let path = req.url;
+    res.send("hello my friend i am working do not worry");
     res.send(path.substring(0, 3));
     // res.send("hello roehampton");
 });
