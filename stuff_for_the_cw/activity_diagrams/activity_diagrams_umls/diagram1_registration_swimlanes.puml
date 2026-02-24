@@ -1,0 +1,69 @@
+@startuml Diagram1_UserRegistrationLogin
+title User Registration & Login Flow
+skinparam ActivityBackgroundColor #EEF4FF
+skinparam ActivityBorderColor #3B5BDB
+skinparam ArrowColor #3B5BDB
+skinparam DiamondBackgroundColor #FFF3BF
+skinparam DiamondBorderColor #F59F00
+skinparam SwimlaneBorderColor #3B5BDB
+skinparam SwimlaneTitleFontColor #3B5BDB
+
+|User|
+start
+:Land on homepage;
+:Click "Sign Up";
+
+|System|
+:Display registration form;
+
+|User|
+repeat
+  :Fill in email, password,\nconfirm password;
+  :Click "Create Account";
+
+|System|
+  if (Valid data?) then (YES)
+  else (NO)
+    :Display validation errors\n(email, password, match);
+  endif
+
+|User|
+repeat while (Valid data?) is (NO)
+-> YES;
+
+|System|
+if (Email already exists?) then (YES)
+  :Display "Email already registered";
+  stop
+else (NO)
+endif
+
+:Hash password (bcrypt);
+:Create user record in database;
+:Send verification email;
+:Create session - log user in;
+:Redirect to "Complete Your Profile";
+
+|User|
+repeat
+  :Enter first name, last name,\nbio (optional), location;
+  :Upload profile picture (optional);
+  :Click "Save Profile";
+
+|System|
+  if (Required fields filled?) then (YES)
+  else (NO)
+    :Display validation errors;
+  endif
+
+|User|
+repeat while (Required fields filled?) is (NO)
+-> YES;
+
+|System|
+:Save profile data to database;
+:Display "Welcome to the community!";
+:Redirect to Dashboard;
+
+stop
+@enduml

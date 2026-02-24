@@ -1,0 +1,64 @@
+@startuml Diagram5_CompleteExchange
+title Complete Exchange Flow
+skinparam ActivityBackgroundColor #EEF4FF
+skinparam ActivityBorderColor #3B5BDB
+skinparam ArrowColor #3B5BDB
+skinparam DiamondBackgroundColor #FFF3BF
+skinparam DiamondBorderColor #F59F00
+skinparam SwimlaneBorderColor #3B5BDB
+skinparam SwimlaneTitleFontColor #3B5BDB
+
+|Owner|
+start
+
+if (Exchange type?) then (LENDING)
+  :Receive item back\nfrom requester;
+  :Inspect item condition;
+  if (Item acceptable?) then (NO)
+    :Discuss damage with requester;
+  else (YES)
+  endif
+else (SWAP / GIVEAWAY)
+  :Meet and complete\nitem handoff;
+endif
+
+:Log in and navigate\nto request detail;
+:Click "Mark as Completed";
+
+|System|
+:Show confirmation dialog;
+
+if (Confirmed?) then (NO)
+  :Stay on request detail;
+  stop
+else (YES)
+endif
+
+:Update status = 'completed';
+:Update completed_date = now();
+
+if (Exchange type?) then (LENDING)
+  :Award +5 points to owner;
+  :Award +10 points to requester;
+  :Mark item as available again;
+else (SWAP / GIVEAWAY)
+  :Award +20 points to both;
+  :Keep item unavailable;
+endif
+
+:Display "Exchange completed!";
+:Prompt both users to rate;
+
+|Owner|
+:Rate the requester\n(1-5 stars);
+
+|Requester|
+:Rate the owner\n(1-5 stars);
+
+|System|
+:Save both ratings to database;
+:Recalculate average_rating\nfor both users;
+:Redirect both to Dashboard;
+
+stop
+@enduml

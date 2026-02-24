@@ -1,0 +1,71 @@
+@startuml Diagram2_CreateListing
+title Create Listing Flow
+skinparam ActivityBackgroundColor #EEF4FF
+skinparam ActivityBorderColor #3B5BDB
+skinparam ArrowColor #3B5BDB
+skinparam DiamondBackgroundColor #FFF3BF
+skinparam DiamondBorderColor #F59F00
+skinparam SwimlaneBorderColor #3B5BDB
+skinparam SwimlaneTitleFontColor #3B5BDB
+
+|User|
+start
+
+if (Logged in?) then (NO)
+  :Go to login page;
+  :Log in;
+else (YES)
+endif
+
+:Click "Add Listing";
+
+|System|
+:Display listing creation form;
+
+|User|
+repeat
+  :Enter title (required);
+  :Enter description (required);
+  :Select category (required);
+  :Select exchange type:\nLend / Swap / Give Away;
+
+  if (Exchange type = Swap?) then (YES)
+    :Enter swap preferences;
+  else (NO)
+  endif
+
+  :Add condition notes (optional);
+  :Select and upload 1-3 photos;
+
+|System|
+  if (Photos valid?) then (YES)
+    :Show photo previews;
+  else (NO)
+    :Display photo error;
+  endif
+
+|User|
+  :Add tags (optional);
+  :Review listing preview;
+  :Click "Publish Listing";
+
+|System|
+  if (All required fields present?) then (YES)
+  else (NO)
+    :Highlight missing fields;
+  endif
+
+|User|
+repeat while (All required fields present?) is (NO)
+-> YES;
+
+|System|
+:Validate all inputs server-side;
+:Save listing to database;
+:Upload photos to server;
+:Create listing_tags records;
+:Display "Listing published!";
+:Redirect to listing detail page;
+
+stop
+@enduml

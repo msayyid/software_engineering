@@ -1,0 +1,71 @@
+@startuml Diagram3_RequestItem
+title Request Item Flow
+skinparam ActivityBackgroundColor #EEF4FF
+skinparam ActivityBorderColor #3B5BDB
+skinparam ArrowColor #3B5BDB
+skinparam DiamondBackgroundColor #FFF3BF
+skinparam DiamondBorderColor #F59F00
+skinparam SwimlaneBorderColor #3B5BDB
+skinparam SwimlaneTitleFontColor #3B5BDB
+
+|Requester|
+start
+:Browse listings page;
+:Click item to view detail;
+
+if (Logged in?) then (NO)
+  :Go to login page;
+  :Log in;
+  :Return to listing;
+else (YES)
+endif
+
+|System|
+:Display full listing info\n(photos, description,\ncondition, owner info);
+
+if (User owns this listing?) then (YES)
+  :Display "Cannot request\nyour own listing";
+  stop
+else (NO)
+endif
+
+if (Item available?) then (NO)
+  :Display "Item currently\nunavailable";
+  stop
+else (YES)
+endif
+
+:Display request form;
+
+|Requester|
+repeat
+  :Write message to owner\n(reason, duration, etc.);
+
+  if (Exchange type = Lend?) then (YES)
+    :Specify borrow duration\n(e.g. weekend, 2 weeks);
+  else (NO)
+  endif
+
+  :Click "Send Request";
+
+|System|
+  if (Message provided?) then (YES)
+  else (NO)
+    :Display "Please add\na message";
+  endif
+
+|Requester|
+repeat while (Message provided?) is (NO)
+-> YES;
+
+|System|
+:Create request record\n(status = 'pending');
+:Record message, duration,\ntimestamp in database;
+:Display "Request sent!";
+:Redirect to "My Requests";
+
+|Owner|
+:Receive notification\n"New request on your item";
+
+stop
+@enduml

@@ -1,0 +1,69 @@
+@startuml Diagram4_AcceptDeclineRequest
+title Accept / Decline Request Flow
+skinparam ActivityBackgroundColor #EEF4FF
+skinparam ActivityBorderColor #3B5BDB
+skinparam ArrowColor #3B5BDB
+skinparam DiamondBackgroundColor #FFF3BF
+skinparam DiamondBorderColor #F59F00
+skinparam SwimlaneBorderColor #3B5BDB
+skinparam SwimlaneTitleFontColor #3B5BDB
+
+|Owner|
+start
+:Log in to platform;
+:View Dashboard;
+:See pending requests badge;
+:Click "Requests on My Items";
+
+|System|
+:Display all pending requests\n(item, requester info, message, date);
+
+|Owner|
+:Review requests;
+:Click on a specific request;
+
+|System|
+:Display full request information;
+
+|Owner|
+:Review requester's profile;
+:Click Accept or Decline;
+
+|System|
+if (Decision?) then (ACCEPT)
+  :Show confirmation dialog\n"Accept this request?";
+
+  if (Owner confirms?) then (YES)
+    :Update status = 'accepted';
+    :Update responded_date = now();
+    :Award +10 points to requester;
+    :Award +5 points to owner;
+    :Mark listing as unavailable;
+    :Send acceptance notification;
+  else (NO)
+    :Return to request detail;
+    stop
+  endif
+
+else (DECLINE)
+  :Show optional reason field;
+
+  |Owner|
+  :Optionally enter decline message;
+  :Click "Confirm Decline";
+
+  |System|
+  :Update status = 'declined';
+  :Update responded_date = now();
+  :Item remains available;
+  :Send decline notification;
+
+endif
+
+:Display result to owner;
+
+|Requester|
+:Receive notification\n(accepted or declined);
+
+stop
+@enduml
