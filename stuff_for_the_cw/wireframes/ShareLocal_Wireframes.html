@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShareLocal — Sprint 2 Wireframes</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Courier New', Courier, monospace; background: #f0ede8; color: #222; min-height: 100vh; }
+
+  /* ── Wireframe Palette ── */
+  :root {
+    --border: #999;
+    --bg-box: #e8e4de;
+    --bg-dark: #c8c4be;
+    --bg-img: #d0ccc6;
+    --accent: #444;
+    --btn: #444;
+    --btn-outline: #777;
+    --tag-bg: #ddd;
+    --white: #f8f6f3;
+    --page-bg: #f0ede8;
+  }
+
+  /* ── Page Switcher Nav ── */
+  #page-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #222; color: #eee;
+    display: flex; align-items: center; gap: 4px;
+    padding: 8px 16px; z-index: 1000; flex-wrap: wrap;
+    font-size: 11px;
+  }
+  #page-nav span { color: #888; margin-right: 6px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  #page-nav button {
+    background: #333; color: #ccc; border: 1px solid #555;
+    padding: 4px 10px; cursor: pointer; border-radius: 3px;
+    font-family: inherit; font-size: 11px; white-space: nowrap;
+    transition: background .15s;
+  }
+  #page-nav button:hover { background: #555; color: #fff; }
+  #page-nav button.active { background: #f0ede8; color: #222; border-color: #f0ede8; font-weight: bold; }
+
+  /* ── Page Wrapper ── */
+  .page { display: none; padding-top: 48px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ── Annotation label ── */
+  .wf-label {
+    display: inline-block; background: #ffeb3b; color: #333;
+    font-size: 9px; padding: 1px 5px; border-radius: 2px;
+    margin-left: 6px; vertical-align: middle; font-weight: bold;
+    letter-spacing: .5px;
+  }
+
+  /* ══════════════════════════════
+     SHARED LAYOUT COMPONENTS
+  ══════════════════════════════ */
+
+  /* Nav bar */
+  .wf-nav {
+    background: var(--white); border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; padding: 12px 24px; gap: 16px; flex-wrap: wrap;
+  }
+  .wf-logo {
+    background: var(--bg-dark); padding: 8px 16px; border: 2px solid var(--border);
+    font-weight: bold; font-size: 13px; letter-spacing: 1px; border-radius: 2px;
+  }
+  .wf-nav-links { display: flex; gap: 12px; flex: 1; }
+  .wf-nav-link {
+    color: var(--accent); text-decoration: none; font-size: 12px;
+    padding: 4px 8px; border-radius: 2px; cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .wf-nav-link:hover { border-color: var(--border); background: var(--bg-box); }
+  .wf-nav-search {
+    border: 2px solid var(--border); background: var(--white);
+    padding: 6px 10px; font-family: inherit; font-size: 12px; width: 200px;
+  }
+  .wf-btn {
+    background: var(--btn); color: var(--white);
+    border: 2px solid var(--btn); padding: 6px 14px;
+    font-family: inherit; font-size: 12px; cursor: pointer; border-radius: 2px;
+  }
+  .wf-btn:hover { background: #222; }
+  .wf-btn.outline {
+    background: transparent; color: var(--btn);
+    border-color: var(--btn-outline);
+  }
+  .wf-btn.outline:hover { background: var(--bg-box); }
+  .wf-btn.sm { padding: 4px 10px; font-size: 11px; }
+  .wf-btn.ghost {
+    background: transparent; color: #888; border-color: #bbb;
+  }
+  .wf-btn.ghost:hover { background: var(--bg-box); color: #444; }
+  .wf-btn.danger { background: transparent; color: #c00; border-color: #c00; }
+
+  .wf-nav-right { display: flex; gap: 8px; align-items: center; }
+  .wf-avatar {
+    width: 32px; height: 32px; background: var(--bg-dark);
+    border: 2px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; cursor: pointer;
+  }
+
+  /* Page content wrapper */
+  .wf-page-content { max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
+  .wf-page-title { font-size: 22px; font-weight: bold; margin-bottom: 4px; }
+  .wf-subtitle { color: #666; font-size: 12px; margin-bottom: 20px; }
+
+  /* Section headers */
+  .wf-section-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px;
+  }
+  .wf-section-title { font-size: 14px; font-weight: bold; letter-spacing: .5px; text-transform: uppercase; color: #555; }
+
+  /* Image placeholder */
+  .wf-img {
+    background: var(--bg-img); border: 2px dashed var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: #999; font-size: 11px; letter-spacing: 1px;
+  }
+
+  /* Card grid */
+  .wf-grid { display: grid; gap: 16px; }
+  .wf-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .wf-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .wf-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  /* Card base */
+  .wf-card {
+    background: var(--white); border: 2px solid var(--border);
+    border-radius: 3px; overflow: hidden;
+  }
+  .wf-card-body { padding: 12px; }
+  .wf-card-title { font-size: 13px; font-weight: bold; margin-bottom: 4px; }
+  .wf-card-meta { font-size: 11px; color: #666; margin-bottom: 4px; }
+
+  /* Tags / badges */
+  .wf-tag {
+    display: inline-block; background: var(--tag-bg); border: 1px solid #bbb;
+    padding: 2px 7px; font-size: 10px; border-radius: 2px; margin: 2px 2px 2px 0;
+  }
+  .wf-tag.exchange { background: #dde; border-color: #aab; }
+  .wf-tag.tier { background: #dfd; border-color: #9b9; font-weight: bold; }
+  .wf-tag.condition { background: #ffd; border-color: #bb9; }
+
+  /* Star rating */
+  .wf-stars { font-size: 12px; color: #888; }
+  .wf-stars span { font-size: 11px; margin-left: 4px; }
+
+  /* Trust score */
+  .wf-trust {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--bg-box); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 2px; font-size: 12px;
+  }
+  .wf-trust-bar {
+    height: 6px; background: var(--bg-dark); border: 1px solid var(--border);
+    border-radius: 3px; overflow: hidden; flex: 1; min-width: 60px;
+  }
+  .wf-trust-fill { height: 100%; background: #555; }
+
+  /* Divider */
+  .wf-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  /* Form elements */
+  .wf-form-group { margin-bottom: 16px; }
+  .wf-label { font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px; color: #555; }
+  .wf-input, .wf-select, .wf-textarea {
+    width: 100%; border: 2px solid var(--border); background: var(--white);
+    padding: 8px 10px; font-family: inherit; font-size: 12px;
+  }
+  .wf-textarea { min-height: 90px; resize: vertical; }
+  .wf-radio-group { display: flex; gap: 16px; flex-wrap: wrap; }
+  .wf-radio { display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; }
+
+  /* Stat boxes */
+  .wf-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .wf-stat-box {
+    background: var(--white); border: 2px solid var(--border);
+    padding: 14px; text-align: center;
+  }
+  .wf-stat-num { font-size: 24px; font-weight: bold; }
+  .wf-stat-lbl { font-size: 10px; color: #777; text-transform: uppercase; letter-spacing: .5px; margin-top: 2px; }
+
+  /* Tab bar */
+  .wf-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+  .wf-tab {
+    padding: 10px 18px; font-size: 12px; cursor: pointer;
+    border: 2px solid transparent; border-bottom: none;
+    background: transparent; font-family: inherit;
+    margin-bottom: -2px;
+  }
+  .wf-tab.active {
+    background: var(--white); border-color: var(--border);
+    font-weight: bold;
+  }
+  .wf-tab:not(.active):hover { background: var(--bg-box); }
+
+  /* Sidebar layout */
+  .wf-with-sidebar { display: grid; grid-template-columns: 230px 1fr; gap: 20px; align-items: start; }
+  .wf-sidebar {
+    background: var(--white); border: 2px solid var(--border); padding: 16px;
+  }
+  .wf-sidebar-title { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #777; margin-bottom: 10px; margin-top: 14px; }
+  .wf-sidebar-title:first-child { margin-top: 0; }
+  .wf-checkbox { display: flex; align-items: center; gap: 7px; font-size: 12px; margin-bottom: 6px; cursor: pointer; }
+
+  /* Pagination */
+  .wf-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 24px; flex-wrap: wrap; }
+  .wf-page-btn {
+    width: 32px; height: 32px; border: 2px solid var(--border);
+    background: var(--white); cursor: pointer; font-family: inherit; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wf-page-btn.active { background: var(--btn); color: var(--white); border-color: var(--btn); }
+
+  /* ── MODAL ── */
+  .wf-modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    z-index: 2000; align-items: center; justify-content: center;
+  }
+  .wf-modal-overlay.open { display: flex; }
+  .wf-modal {
+    background: var(--white); border: 3px solid var(--border);
+    width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+    padding: 24px; position: relative;
+  }
+  .wf-modal-title { font-size: 16px; font-weight: bold; margin-bottom: 16px; }
+  .wf-modal-close {
+    position: absolute; top: 12px; right: 14px;
+    background: none; border: none; font-size: 18px; cursor: pointer; font-family: inherit;
+  }
+
+  /* ── HERO ── */
+  .wf-hero {
+    background: var(--bg-dark); border: 2px solid var(--border);
+    padding: 56px 40px; text-align: center; margin-bottom: 36px;
+  }
+  .wf-hero h1 { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+  .wf-hero p { font-size: 14px; color: #555; margin-bottom: 20px; }
+  .wf-hero .wf-btn-group { display: flex; gap: 10px; justify-content: center; }
+
+  /* How it works */
+  .wf-how { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 36px; }
+  .wf-how-card { background: var(--white); border: 2px solid var(--border); padding: 20px; text-align: center; }
+  .wf-how-icon { font-size: 28px; margin-bottom: 8px; }
+  .wf-how-title { font-size: 13px; font-weight: bold; margin-bottom: 6px; }
+  .wf-how-desc { font-size: 11px; color: #666; line-height: 1.5; }
+
+  /* Category bubbles */
+  .wf-cats { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin-bottom: 36px; }
+  .wf-cat-card { background: var(--white); border: 2px solid var(--border); padding: 14px; text-align: center; cursor: pointer; }
+  .wf-cat-card:hover { background: var(--bg-box); }
+  .wf-cat-icon { font-size: 22px; margin-bottom: 5px; }
+  .wf-cat-name { font-size: 11px; font-weight: bold; }
+  .wf-cat-count { font-size: 10px; color: #888; }
+
+  /* CTA banner */
+  .wf-cta {
+    background: var(--bg-dark); border: 2px solid var(--border);
+    padding: 32px; text-align: center; margin-bottom: 36px;
+  }
+
+  /* Footer */
+  .wf-footer {
+    background: var(--bg-dark); border-top: 2px solid var(--border);
+    padding: 16px 24px; text-align: center; font-size: 11px; color: #666;
+  }
+
+  /* Map placeholder */
+  .wf-map {
+    background: var(--bg-img); border: 2px dashed var(--border);
+    height: 320px; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 8px; color: #888; font-size: 12px;
+  }
+  .wf-map-icon { font-size: 32px; }
+
+  /* Toggle switch */
+  .wf-toggle-group { display: flex; border: 2px solid var(--border); overflow: hidden; border-radius: 2px; }
+  .wf-toggle-btn { padding: 6px 14px; font-family: inherit; font-size: 11px; border: none; background: var(--white); cursor: pointer; }
+  .wf-toggle-btn.active { background: var(--btn); color: #fff; }
+
+  /* Photo upload zone */
+  .wf-photo-upload {
+    border: 2px dashed var(--border); background: var(--bg-box);
+    height: 120px; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 6px; color: #888; font-size: 12px; cursor: pointer;
+  }
+  .wf-photo-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 10px; }
+  .wf-photo-thumb { height: 70px; }
+
+  /* Profile hero */
+  .wf-profile-header {
+    background: var(--white); border: 2px solid var(--border);
+    padding: 24px; display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;
+  }
+  .wf-avatar-lg {
+    width: 80px; height: 80px; background: var(--bg-dark);
+    border: 2px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+
+  /* Badges row */
+  .wf-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .wf-badge {
+    background: var(--bg-box); border: 2px solid var(--border);
+    padding: 4px 10px; font-size: 10px; border-radius: 2px;
+    font-weight: bold; display: flex; align-items: center; gap: 4px;
+  }
+
+  /* Listing detail layout */
+  .wf-detail-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+  .wf-detail-photos { margin-bottom: 12px; }
+  .wf-detail-thumb-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 8px; }
+  .wf-owner-card {
+    background: var(--white); border: 2px solid var(--border); padding: 18px;
+    margin-bottom: 16px;
+  }
+  .wf-owner-row { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+
+  /* Request card (inbox) */
+  .wf-request-card {
+    background: var(--white); border: 2px solid var(--border);
+    padding: 14px; margin-bottom: 10px;
+  }
+
+  /* Activity item */
+  .wf-activity { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: 12px; }
+  .wf-activity-dot { width: 8px; height: 8px; background: #888; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+
+  /* ── Annotation box ── */
+  .wf-annotations {
+    background: #fffde7; border-left: 4px solid #f9a825;
+    padding: 12px 16px; margin-bottom: 20px; font-size: 11px; line-height: 1.6;
+  }
+  .wf-annotations strong { font-size: 12px; display: block; margin-bottom: 6px; }
+  .wf-annotations li { margin-left: 14px; }
+</style>
+</head>
+<body>
+
+<!-- ── PAGE SWITCHER ── -->
+<nav id="page-nav">
+  <span>WIREFRAMES</span>
+  <button class="active" onclick="showPage('homepage', this)">🏠 Homepage</button>
+  <button onclick="showPage('browse', this)">🔍 Browse Listings</button>
+  <button onclick="showPage('detail', this)">📦 Listing Detail</button>
+  <button onclick="showPage('create', this)">✏️ Create Listing</button>
+  <button onclick="showPage('users', this)">👥 Users List</button>
+  <button onclick="showPage('profile', this)">👤 User Profile</button>
+</nav>
+
+
+<!-- ══════════════════════════════════════
+     PAGE 1 — HOMEPAGE
+══════════════════════════════════════ -->
+<div class="page active" id="page-homepage">
+
+  <!-- NAV (logged-out) -->
+  <nav class="wf-nav">
+    <div class="wf-logo">ShareLocal</div>
+    <div class="wf-nav-links">
+      <a class="wf-nav-link" onclick="showPage('browse', document.querySelectorAll('#page-nav button')[1])">Browse</a>
+      <a class="wf-nav-link" onclick="showPage('users', document.querySelectorAll('#page-nav button')[4])">Users</a>
+      <a class="wf-nav-link">Categories</a>
+    </div>
+    <input class="wf-nav-search" placeholder="🔍  Search items..." />
+    <div class="wf-nav-right">
+      <button class="wf-btn outline">Log In</button>
+      <button class="wf-btn">Sign Up</button>
+    </div>
+  </nav>
+
+  <div class="wf-page-content">
+    <div class="wf-annotations">
+      <strong>📍 Page: Homepage (Public — logged out)</strong>
+      <ul>
+        <li>Hero CTA pushes guests toward sign-up or browsing</li>
+        <li>"How It Works" section explains the 3-step exchange loop</li>
+        <li>Featured listings & category grid give immediate browsing value</li>
+        <li>Navigation shows Log In / Sign Up when no session exists</li>
+      </ul>
+    </div>
+
+    <!-- HERO -->
+    <div class="wf-hero">
+      <h1>Share Items with Your Community</h1>
+      <p>Borrow, swap, or give away items locally — no money needed.</p>
+      <div class="wf-btn-group">
+        <button class="wf-btn" onclick="showPage('browse', document.querySelectorAll('#page-nav button')[1])">Browse Items</button>
+        <button class="wf-btn outline">Sign Up Free</button>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="wf-section-header">
+      <div class="wf-section-title">How It Works</div>
+    </div>
+    <div class="wf-how">
+      <div class="wf-how-card">
+        <div class="wf-how-icon">📋</div>
+        <div class="wf-how-title">1. List Your Items</div>
+        <div class="wf-how-desc">Add items you're willing to lend, swap, or give away. Add photos, condition & availability.</div>
+      </div>
+      <div class="wf-how-card">
+        <div class="wf-how-icon">🔍</div>
+        <div class="wf-how-title">2. Browse &amp; Request</div>
+        <div class="wf-how-desc">Search by category, location or keyword. Send a request to the item owner.</div>
+      </div>
+      <div class="wf-how-card">
+        <div class="wf-how-icon">🤝</div>
+        <div class="wf-how-title">3. Exchange &amp; Build Trust</div>
+        <div class="wf-how-desc">Complete exchanges to earn points, build your trust score and unlock new tiers.</div>
+      </div>
+    </div>
+    <hr class="wf-divider">
+
+    <!-- FEATURED LISTINGS -->
+    <div class="wf-section-header">
+      <div class="wf-section-title">Recently Added Items</div>
+      <button class="wf-btn outline sm" onclick="showPage('browse', document.querySelectorAll('#page-nav button')[1])">View All Items →</button>
+    </div>
+    <div class="wf-grid wf-grid-4" style="margin-bottom:32px">
+      <div class="wf-card" onclick="showPage('detail', document.querySelectorAll('#page-nav button')[2])" style="cursor:pointer">
+        <div class="wf-img" style="height:120px">[ PHOTO ]</div>
+        <div class="wf-card-body">
+          <div class="wf-card-title">Cordless Drill</div>
+          <div class="wf-card-meta">Tools · 1.2 km away</div>
+          <div class="wf-tag exchange">Lending</div>
+        </div>
+      </div>
+      <div class="wf-card" style="cursor:pointer">
+        <div class="wf-img" style="height:120px">[ PHOTO ]</div>
+        <div class="wf-card-body">
+          <div class="wf-card-title">Python Textbook</div>
+          <div class="wf-card-meta">Books · 0.4 km away</div>
+          <div class="wf-tag exchange">Swap</div>
+        </div>
+      </div>
+      <div class="wf-card" style="cursor:pointer">
+        <div class="wf-img" style="height:120px">[ PHOTO ]</div>
+        <div class="wf-card-body">
+          <div class="wf-card-title">Camping Tent (2-man)</div>
+          <div class="wf-card-meta">Sports · 2.1 km away</div>
+          <div class="wf-tag exchange">Lending</div>
+        </div>
+      </div>
+      <div class="wf-card" style="cursor:pointer">
+        <div class="wf-img" style="height:120px">[ PHOTO ]</div>
+        <div class="wf-card-body">
+          <div class="wf-card-title">Baby High Chair</div>
+          <div class="wf-card-meta">Baby Items · 0.8 km away</div>
+          <div class="wf-tag exchange">Giveaway</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BROWSE BY CATEGORY -->
+    <div class="wf-section-header">
+      <div class="wf-section-title">Browse by Category</div>
+    </div>
+    <div class="wf-cats">
+      <div class="wf-cat-card"><div class="wf-cat-icon">🔧</div><div class="wf-cat-name">Tools</div><div class="wf-cat-count">23 items</div></div>
+      <div class="wf-cat-card"><div class="wf-cat-icon">📚</div><div class="wf-cat-name">Books</div><div class="wf-cat-count">45 items</div></div>
+      <div class="wf-cat-card"><div class="wf-cat-icon">👶</div><div class="wf-cat-name">Baby Items</div><div class="wf-cat-count">12 items</div></div>
+      <div class="wf-cat-card"><div class="wf-cat-icon">⚽</div><div class="wf-cat-name">Sports</div><div class="wf-cat-count">18 items</div></div>
+      <div class="wf-cat-card"><div class="wf-cat-icon">🏠</div><div class="wf-cat-name">Household</div><div class="wf-cat-count">34 items</div></div>
+      <div class="wf-cat-card"><div class="wf-cat-icon">💻</div><div class="wf-cat-name">Electronics</div><div class="wf-cat-count">8 items</div></div>
+    </div>
+
+    <!-- CTA BANNER -->
+    <div class="wf-cta">
+      <p style="font-size:16px;font-weight:bold;margin-bottom:10px">Join 500+ community members sharing items</p>
+      <button class="wf-btn">Sign Up Now — It's Free</button>
+    </div>
+  </div>
+
+  <div class="wf-footer">
+    About | How It Works | Safety Tips | Contact | Terms | Privacy &nbsp;·&nbsp; © 2025 ShareLocal
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PAGE 2 — BROWSE LISTINGS
+══════════════════════════════════════ -->
+<div class="page" id="page-browse">
+
+  <nav class="wf-nav">
+    <div class="wf-logo">ShareLocal</div>
+    <div class="wf-nav-links">
+      <a class="wf-nav-link" onclick="showPage('homepage', document.querySelectorAll('#page-nav button')[0])">Home</a>
+      <a class="wf-nav-link" style="font-weight:bold;border-color:var(--border)">Browse</a>
+      <a class="wf-nav-link" onclick="showPage('users', document.querySelectorAll('#page-nav button')[4])">Users</a>
+      <a class="wf-nav-link">Dashboard</a>
+    </div>
+    <input class="wf-nav-search" value="drill" />
+    <div class="wf-nav-right">
+      <span style="font-size:18px;cursor:pointer">🔔</span>
+      <div class="wf-avatar">SJ ▾</div>
+    </div>
+  </nav>
+
+  <div class="wf-page-content">
+    <div class="wf-annotations">
+      <strong>📍 Page: Browse / Listings (Logged In)</strong>
+      <ul>
+        <li>Left sidebar has persistent filters; each filter group is independently collapsible</li>
+        <li>Grid ↔ Map toggle — Map view is a Sprint 4 feature, shown as placeholder</li>
+        <li>Sort dropdown and active filter chips sit above the results grid</li>
+        <li>Clicking any item card navigates to the Listing Detail page</li>
+      </ul>
+    </div>
+
+    <div class="wf-section-header" style="margin-bottom:14px">
+      <div>
+        <div class="wf-page-title">Browse Items</div>
+        <div class="wf-subtitle">142 items found</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="wf-toggle-group">
+          <button class="wf-toggle-btn active" id="grid-toggle" onclick="toggleView('grid')">⊞ Grid</button>
+          <button class="wf-toggle-btn" id="map-toggle" onclick="toggleView('map')">🗺 Map <span class="wf-label">Sprint 4</span></button>
+        </div>
+        <select class="wf-select" style="width:auto">
+          <option>Sort: Newest First</option>
+          <option>Sort: Closest First</option>
+          <option>Sort: A–Z</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Active filter chips -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:11px;color:#666">Active filters:</span>
+      <span class="wf-tag" style="display:flex;align-items:center;gap:4px">Tools <button onclick="this.parentElement.remove()" style="border:none;background:none;cursor:pointer;font-size:11px">✕</button></span>
+      <span class="wf-tag" style="display:flex;align-items:center;gap:4px">Lending <button onclick="this.parentElement.remove()" style="border:none;background:none;cursor:pointer;font-size:11px">✕</button></span>
+      <a style="font-size:11px;color:#666;cursor:pointer;text-decoration:underline">Clear all</a>
+    </div>
+
+    <div class="wf-with-sidebar">
+
+      <!-- SIDEBAR FILTERS -->
+      <div class="wf-sidebar">
+        <div class="wf-sidebar-title">Category</div>
+        <label class="wf-checkbox"><input type="checkbox" checked> Tools (23)</label>
+        <label class="wf-checkbox"><input type="checkbox"> Books (45)</label>
+        <label class="wf-checkbox"><input type="checkbox"> Baby Items (12)</label>
+        <label class="wf-checkbox"><input type="checkbox"> Sports (18)</label>
+        <label class="wf-checkbox"><input type="checkbox"> Household (34)</label>
+        <label class="wf-checkbox"><input type="checkbox"> Electronics (8)</label>
+
+        <div class="wf-sidebar-title">Exchange Type</div>
+        <label class="wf-checkbox"><input type="checkbox" checked> Lending</label>
+        <label class="wf-checkbox"><input type="checkbox"> Swap</label>
+        <label class="wf-checkbox"><input type="checkbox"> Giveaway</label>
+
+        <div class="wf-sidebar-title">Condition</div>
+        <label class="wf-checkbox"><input type="checkbox"> Like New</label>
+        <label class="wf-checkbox"><input type="checkbox"> Good</label>
+        <label class="wf-checkbox"><input type="checkbox"> Fair</label>
+
+        <div class="wf-sidebar-title">Distance</div>
+        <input type="range" style="width:100%;margin-bottom:4px">
+        <div style="font-size:11px;color:#666">Within 5 km</div>
+
+        <div class="wf-sidebar-title">Availability</div>
+        <label class="wf-checkbox"><input type="checkbox" checked> Available Now</label>
+        <label class="wf-checkbox"><input type="checkbox"> Specific Dates</label>
+
+        <hr class="wf-divider" style="margin:12px 0">
+        <button class="wf-btn" style="width:100%">Apply Filters</button>
+        <button class="wf-btn ghost" style="width:100%;margin-top:6px">Reset</button>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div>
+        <!-- GRID VIEW -->
+        <div id="browse-grid">
+          <div class="wf-grid wf-grid-3">
+            <!-- Card 1 -->
+            <div class="wf-card" style="cursor:pointer" onclick="showPage('detail', document.querySelectorAll('#page-nav button')[2])">
+              <div class="wf-img" style="height:130px">[ PHOTO ]</div>
+              <div class="wf-card-body">
+                <div class="wf-card-title">Cordless Drill — Bosch</div>
+                <div class="wf-card-meta">Tools · 1.2 km · Listed 2 days ago</div>
+                <div><span class="wf-tag exchange">Lending</span><span class="wf-tag condition">Good</span></div>
+                <div class="wf-stars" style="margin-top:6px">★★★★★ <span>Sarah J. (4.9)</span></div>
+              </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="wf-card" style="cursor:pointer">
+              <div class="wf-img" style="height:130px">[ PHOTO ]</div>
+              <div class="wf-card-body">
+                <div class="wf-card-title">Garden Tool Set</div>
+                <div class="wf-card-meta">Tools · 0.8 km · Listed 5 days ago</div>
+                <div><span class="wf-tag exchange">Swap</span><span class="wf-tag condition">Like New</span></div>
+                <div class="wf-stars" style="margin-top:6px">★★★★☆ <span>Mike D. (4.2)</span></div>
+              </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="wf-card" style="cursor:pointer">
+              <div class="wf-img" style="height:130px">[ PHOTO ]</div>
+              <div class="wf-card-body">
+                <div class="wf-card-title">Extension Ladder (4m)</div>
+                <div class="wf-card-meta">Tools · 2.4 km · Listed 1 week ago</div>
+                <div><span class="wf-tag exchange">Lending</span><span class="wf-tag condition">Good</span></div>
+                <div class="wf-stars" style="margin-top:6px">★★★★★ <span>Priya T. (5.0)</span></div>
+              </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="wf-card" style="cursor:pointer">
+              <div class="wf-img" style="height:130px">[ PHOTO ]</div>
+              <div class="wf-card-body">
+                <div class="wf-card-title">Hand Tool Set (20pc)</div>
+                <div class="wf-card-meta">Tools · 1.8 km · Listed 3 days ago</div>
+                <div><span class="wf-tag exchange">Lending</span><span class="wf-tag condition">Fair</span></div>
+                <div class="wf-stars" style="margin-top:6px">★★★☆☆ <span>James L. (3.8)</span></div>
+              </div>
+            </div>
+            <!-- Card 5 -->
+            <div class="wf-card" style="cursor:pointer">
+              <div class="wf-img" style="height:130px">[ PHOTO ]</div>
+              <div class="wf-card-body">
+                <div class="wf-card-title">Electric Sander</div>
+                <div class="wf-card-meta">Tools · 3.0 km · Listed today</div>
+                <div><span class="wf-tag exchange">Lending</span><span class="wf-tag condition">Like New</span></div>
+                <div class="wf-stars" style="margin-top:6px">★★★★★ <span>Aisha K. (4.7)</span></div>
+              </div>
+            </div>
+            <!-- Card 6 -->
+            <div class="wf-card" style="cursor:pointer">
+              <div class="wf-img" style="height:130px">[ PHOTO ]</div>
+              <div class="wf-card-body">
+                <div class="wf-card-title">Spirit Level &amp; Tape Measure</div>
+                <div class="wf-card-meta">Tools · 0.5 km · Listed 6 days ago</div>
+                <div><span class="wf-tag exchange">Giveaway</span><span class="wf-tag condition">Good</span></div>
+                <div class="wf-stars" style="margin-top:6px">★★★★☆ <span>Tom W. (4.4)</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wf-pagination">
+            <button class="wf-page-btn">‹‹</button>
+            <button class="wf-page-btn active">1</button>
+            <button class="wf-page-btn">2</button>
+            <button class="wf-page-btn">3</button>
+            <button class="wf-page-btn">4</button>
+            <button class="wf-page-btn">››</button>
+          </div>
+        </div>
+
+        <!-- MAP VIEW (placeholder) -->
+        <div id="browse-map" style="display:none">
+          <div class="wf-map">
+            <div class="wf-map-icon">🗺</div>
+            <div><strong>Interactive Map View</strong></div>
+            <div>Google Maps API — Pins per listing</div>
+            <div class="wf-label" style="font-size:11px;padding:4px 10px">Sprint 4 Feature — Placeholder</div>
+          </div>
+          <div style="margin-top:14px;font-size:11px;color:#666">
+            Map will show item pins with hover-preview cards. Clicking a pin opens the listing detail.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-footer">About | How It Works | Safety Tips | Contact | Terms | Privacy · © 2025 ShareLocal</div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PAGE 3 — LISTING DETAIL
+══════════════════════════════════════ -->
+<div class="page" id="page-detail">
+
+  <nav class="wf-nav">
+    <div class="wf-logo">ShareLocal</div>
+    <div class="wf-nav-links">
+      <a class="wf-nav-link" onclick="showPage('browse', document.querySelectorAll('#page-nav button')[1])">← Back to Browse</a>
+    </div>
+    <div class="wf-nav-right">
+      <span style="font-size:18px;cursor:pointer">🔔</span>
+      <div class="wf-avatar">SJ ▾</div>
+    </div>
+  </nav>
+
+  <div class="wf-page-content">
+    <div class="wf-annotations">
+      <strong>📍 Page: Listing Detail</strong>
+      <ul>
+        <li>Left column: photos (main + thumbnails), item details, description, tags</li>
+        <li>Right sidebar: owner summary with trust score, exchange type badge, "Request" CTA</li>
+        <li>"Request Item" button opens the Request Form modal (try it!)</li>
+        <li>Trust score shown as labelled bar, owner tier badge, and rating stars</li>
+      </ul>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div style="font-size:11px;color:#666;margin-bottom:14px">
+      Browse › Tools › <strong>Cordless Drill — Bosch</strong>
+    </div>
+
+    <div class="wf-detail-layout">
+
+      <!-- LEFT: Photos + Details -->
+      <div>
+        <div class="wf-detail-photos">
+          <div class="wf-img" style="height:300px;margin-bottom:8px">[ MAIN PHOTO ]</div>
+          <div class="wf-detail-thumb-row">
+            <div class="wf-img" style="height:70px">[ IMG 2 ]</div>
+            <div class="wf-img" style="height:70px">[ IMG 3 ]</div>
+            <div class="wf-img" style="height:70px">[ IMG 4 ]</div>
+            <div class="wf-img" style="height:70px;opacity:.5">+2 more</div>
+          </div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-card-body">
+            <h2 style="font-size:18px;font-weight:bold;margin-bottom:6px">Cordless Drill — Bosch 18V</h2>
+            <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+              <span class="wf-tag">Tools</span>
+              <span class="wf-tag exchange">Lending</span>
+              <span class="wf-tag condition">Good Condition</span>
+            </div>
+            <div style="font-size:12px;color:#555;margin-bottom:14px;line-height:1.6">
+              Bosch 18V cordless drill with two batteries and charger included. Used for home renovations but mostly sits in the garage. Happy to lend for up to 2 weeks. Please return with charged batteries.
+            </div>
+
+            <hr class="wf-divider" style="margin:12px 0">
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-bottom:12px">
+              <div><strong>Category:</strong> Tools</div>
+              <div><strong>Condition:</strong> Good</div>
+              <div><strong>Exchange:</strong> Lending (borrow &amp; return)</div>
+              <div><strong>Location:</strong> ~1.2 km away</div>
+              <div><strong>Max Loan:</strong> 2 weeks</div>
+              <div><strong>Available:</strong> Mon–Fri, weekends</div>
+            </div>
+
+            <div style="font-size:12px;margin-bottom:4px"><strong>Tags:</strong></div>
+            <div>
+              <span class="wf-tag">cordless</span>
+              <span class="wf-tag">drill</span>
+              <span class="wf-tag">bosch</span>
+              <span class="wf-tag">18v</span>
+              <span class="wf-tag">DIY</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Owner + Request -->
+      <div>
+
+        <!-- Owner Card -->
+        <div class="wf-owner-card">
+          <div class="wf-section-title" style="margin-bottom:12px">Item Owner</div>
+          <div class="wf-owner-row">
+            <div class="wf-avatar-lg" onclick="showPage('profile', document.querySelectorAll('#page-nav button')[5])" style="cursor:pointer;width:56px;height:56px;font-size:16px">SJ</div>
+            <div>
+              <div style="font-size:13px;font-weight:bold">Sarah Johnson</div>
+              <div style="font-size:11px;color:#666">Northside · Member since Jan 2024</div>
+              <div class="wf-stars">★★★★★ <span>4.9 (32 reviews)</span></div>
+            </div>
+          </div>
+
+          <!-- Trust Score -->
+          <div style="font-size:11px;font-weight:bold;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;color:#666">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div class="wf-trust-bar" style="flex:1"><div class="wf-trust-fill" style="width:85%"></div></div>
+            <span style="font-size:13px;font-weight:bold">85/100</span>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="wf-tag tier">🥈 Silver Tier</span>
+            <span class="wf-tag">150 pts</span>
+            <span class="wf-tag">12 exchanges</span>
+          </div>
+
+          <a onclick="showPage('profile', document.querySelectorAll('#page-nav button')[5])" style="font-size:12px;cursor:pointer;text-decoration:underline;color:#444">View Full Profile →</a>
+        </div>
+
+        <!-- Exchange Type Info -->
+        <div class="wf-owner-card" style="background:var(--bg-box)">
+          <div style="font-size:12px;font-weight:bold;margin-bottom:6px">Exchange Type</div>
+          <div class="wf-tag exchange" style="font-size:12px;padding:5px 12px">🔄 Lending — Borrow &amp; Return</div>
+          <div style="font-size:11px;color:#666;margin-top:8px">Borrow this item and return it when done. Owner sets return timeframe.</div>
+        </div>
+
+        <!-- Request CTA -->
+        <div class="wf-owner-card">
+          <button class="wf-btn" style="width:100%;font-size:14px;padding:12px" onclick="document.getElementById('request-modal').classList.add('open')">
+            Request This Item
+          </button>
+          <div style="font-size:10px;color:#888;text-align:center;margin-top:6px">
+            Owner will be notified and can accept or decline
+          </div>
+        </div>
+
+        <!-- Report link -->
+        <div style="text-align:center;margin-top:8px">
+          <a style="font-size:11px;color:#999;cursor:pointer;text-decoration:underline">Report this listing</a>
+        </div>
+      </div>
+
+    </div><!-- end detail layout -->
+  </div>
+
+  <div class="wf-footer">About | How It Works | Safety Tips | Contact | Terms | Privacy · © 2025 ShareLocal</div>
+</div>
+
+<!-- REQUEST MODAL -->
+<div class="wf-modal-overlay" id="request-modal">
+  <div class="wf-modal">
+    <button class="wf-modal-close" onclick="document.getElementById('request-modal').classList.remove('open')">✕</button>
+    <div class="wf-modal-title">Request: Cordless Drill — Bosch 18V</div>
+
+    <div style="background:var(--bg-box);border:1px solid var(--border);padding:10px;margin-bottom:16px;font-size:12px">
+      <strong>You are requesting from:</strong> Sarah Johnson &nbsp;·&nbsp; Trust 85/100 &nbsp;·&nbsp; Silver Tier
+    </div>
+
+    <div class="wf-form-group">
+      <label class="wf-label">Why do you need this item? <span style="color:#c00">*</span></label>
+      <textarea class="wf-textarea" placeholder="e.g. Need to put up shelves this weekend — just for one afternoon..."></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="wf-form-group">
+        <label class="wf-label">From Date</label>
+        <input class="wf-input" type="text" placeholder="DD / MM / YYYY">
+      </div>
+      <div class="wf-form-group">
+        <label class="wf-label">Return Date</label>
+        <input class="wf-input" type="text" placeholder="DD / MM / YYYY">
+      </div>
+    </div>
+    <div class="wf-form-group">
+      <label class="wf-label">Pickup / Collection Preference</label>
+      <select class="wf-select">
+        <option>I will collect from owner</option>
+        <option>Can we arrange delivery?</option>
+      </select>
+    </div>
+    <div class="wf-form-group">
+      <label class="wf-label">Additional Message (optional)</label>
+      <textarea class="wf-textarea" style="min-height:60px" placeholder="Any other details..."></textarea>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+      <button class="wf-btn outline" onclick="document.getElementById('request-modal').classList.remove('open')">Cancel</button>
+      <button class="wf-btn" onclick="alert('✅ Request sent! The owner will be notified.');document.getElementById('request-modal').classList.remove('open')">Send Request</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PAGE 4 — CREATE / EDIT LISTING
+══════════════════════════════════════ -->
+<div class="page" id="page-create">
+
+  <nav class="wf-nav">
+    <div class="wf-logo">ShareLocal</div>
+    <div class="wf-nav-links">
+      <a class="wf-nav-link" onclick="showPage('browse', document.querySelectorAll('#page-nav button')[1])">← Cancel &amp; Back</a>
+    </div>
+    <div class="wf-nav-right">
+      <span style="font-size:18px;cursor:pointer">🔔</span>
+      <div class="wf-avatar">SJ ▾</div>
+    </div>
+  </nav>
+
+  <div class="wf-page-content" style="max-width:740px">
+    <div class="wf-annotations">
+      <strong>📍 Page: Create / Edit Listing (Logged In Only)</strong>
+      <ul>
+        <li>Same form is reused for Edit mode — title changes to "Edit Listing" and fields pre-fill</li>
+        <li>Photo upload: up to 5 images; first image becomes the cover photo</li>
+        <li>Exchange type selection changes which secondary fields appear (e.g. return date for Lending)</li>
+        <li>Tags are free-text, comma-separated; shown as chips below the input</li>
+        <li>Three action buttons: Cancel, Save as Draft, Publish</li>
+      </ul>
+    </div>
+
+    <div class="wf-page-title">Create a New Listing</div>
+    <div class="wf-subtitle">Fill in the details about the item you want to share</div>
+
+    <div class="wf-card">
+      <div class="wf-card-body" style="padding:24px">
+
+        <!-- PHOTOS -->
+        <div class="wf-form-group">
+          <label class="wf-label">Photos (up to 5) <span style="color:#c00">*</span></label>
+          <div class="wf-photo-grid">
+            <div class="wf-img wf-photo-thumb" style="height:80px;cursor:pointer;border-style:dashed;flex-direction:column;gap:4px">
+              <span style="font-size:20px">+</span>
+              <span style="font-size:10px">Cover photo</span>
+            </div>
+            <div class="wf-img wf-photo-thumb" style="height:80px;cursor:pointer;border-style:dashed">+</div>
+            <div class="wf-img wf-photo-thumb" style="height:80px;cursor:pointer;border-style:dashed">+</div>
+            <div class="wf-img wf-photo-thumb" style="height:80px;cursor:pointer;border-style:dashed">+</div>
+          </div>
+          <div style="font-size:10px;color:#888">First image = cover photo. Accepts JPG, PNG up to 5MB each.</div>
+        </div>
+
+        <hr class="wf-divider">
+
+        <!-- TITLE -->
+        <div class="wf-form-group">
+          <label class="wf-label">Listing Title <span style="color:#c00">*</span></label>
+          <input class="wf-input" type="text" placeholder="e.g. Cordless Drill — Bosch 18V">
+          <div style="font-size:10px;color:#888;margin-top:3px">Max 80 characters. Be specific — include brand/model if relevant.</div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="wf-form-group">
+          <label class="wf-label">Description <span style="color:#c00">*</span></label>
+          <textarea class="wf-textarea" style="min-height:110px" placeholder="Describe the item — what's included, any wear/damage, any rules for borrowing..."></textarea>
+        </div>
+
+        <!-- CATEGORY + CONDITION -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="wf-form-group">
+            <label class="wf-label">Category <span style="color:#c00">*</span></label>
+            <select class="wf-select">
+              <option value="">— Select category —</option>
+              <option>Tools</option>
+              <option>Books</option>
+              <option>Baby Items</option>
+              <option>Sports &amp; Outdoors</option>
+              <option>Household</option>
+              <option>Electronics</option>
+              <option>Clothing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="wf-form-group">
+            <label class="wf-label">Condition <span style="color:#c00">*</span></label>
+            <select class="wf-select">
+              <option value="">— Select condition —</option>
+              <option>Like New</option>
+              <option>Good</option>
+              <option>Fair</option>
+              <option>Parts / Repair</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- EXCHANGE TYPE -->
+        <div class="wf-form-group">
+          <label class="wf-label">Exchange Type <span style="color:#c00">*</span></label>
+          <div class="wf-radio-group">
+            <label class="wf-radio"><input type="radio" name="exchange" value="lending" checked> 🔄 Lending (borrow &amp; return)</label>
+            <label class="wf-radio"><input type="radio" name="exchange" value="swap"> ↔ Swap (trade for something)</label>
+            <label class="wf-radio"><input type="radio" name="exchange" value="giveaway"> 🎁 Giveaway (free, keep it)</label>
+          </div>
+          <div style="font-size:11px;color:#777;margin-top:6px;background:var(--bg-box);padding:8px;border:1px solid var(--border)">
+            <strong>Lending:</strong> Borrower returns item after an agreed time period.
+          </div>
+        </div>
+
+        <!-- AVAILABILITY -->
+        <div class="wf-form-group">
+          <label class="wf-label">Availability</label>
+          <div class="wf-radio-group" style="margin-bottom:10px">
+            <label class="wf-radio"><input type="radio" name="avail" checked> Always available</label>
+            <label class="wf-radio"><input type="radio" name="avail"> Specific dates / periods</label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label class="wf-label" style="font-weight:normal">Max loan duration</label>
+              <input class="wf-input" placeholder="e.g. 2 weeks">
+            </div>
+            <div>
+              <label class="wf-label" style="font-weight:normal">Preferred days</label>
+              <input class="wf-input" placeholder="e.g. Weekdays only">
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCATION -->
+        <div class="wf-form-group">
+          <label class="wf-label">Pickup Location <span style="color:#c00">*</span></label>
+          <input class="wf-input" placeholder="General area or postcode — e.g. Northside, 2060">
+          <div style="font-size:10px;color:#888;margin-top:3px">Exact address is never shown publicly — only approx. distance.</div>
+        </div>
+
+        <!-- TAGS -->
+        <div class="wf-form-group">
+          <label class="wf-label">Tags (optional)</label>
+          <input class="wf-input" placeholder="Add tags separated by commas — e.g. cordless, bosch, DIY">
+          <div style="margin-top:8px">
+            <span class="wf-tag">cordless</span>
+            <span class="wf-tag">DIY</span>
+            <span class="wf-tag">bosch</span>
+            <span class="wf-tag" style="cursor:pointer">✕ 18v</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap">
+      <button class="wf-btn ghost" onclick="showPage('browse', document.querySelectorAll('#page-nav button')[1])">Cancel</button>
+      <button class="wf-btn outline">Save as Draft</button>
+      <button class="wf-btn" onclick="alert('✅ Listing published!')">Publish Listing</button>
+    </div>
+  </div>
+
+  <div class="wf-footer">About | How It Works | Safety Tips | Contact | Terms | Privacy · © 2025 ShareLocal</div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PAGE 5 — USERS LIST
+══════════════════════════════════════ -->
+<div class="page" id="page-users">
+
+  <nav class="wf-nav">
+    <div class="wf-logo">ShareLocal</div>
+    <div class="wf-nav-links">
+      <a class="wf-nav-link" onclick="showPage('homepage', document.querySelectorAll('#page-nav button')[0])">Home</a>
+      <a class="wf-nav-link" onclick="showPage('browse', document.querySelectorAll('#page-nav button')[1])">Browse</a>
+      <a class="wf-nav-link" style="font-weight:bold;border-color:var(--border)">Users</a>
+      <a class="wf-nav-link">Dashboard</a>
+    </div>
+    <input class="wf-nav-search" placeholder="🔍  Search members...">
+    <div class="wf-nav-right">
+      <span style="font-size:18px;cursor:pointer">🔔</span>
+      <div class="wf-avatar">SJ ▾</div>
+    </div>
+  </nav>
+
+  <div class="wf-page-content">
+    <div class="wf-annotations">
+      <strong>📍 Page: Users List (Sprint 3 Required)</strong>
+      <ul>
+        <li>Each user card shows: avatar, name, location, tier badge, trust score bar, item count, and link to profile</li>
+        <li>Sort by: Newest, Most Active, Highest Rated, Highest Trust</li>
+        <li>Tier badges: Bronze / Silver / Gold — colour-coded chips</li>
+        <li>"View Profile" links to the User Profile page</li>
+      </ul>
+    </div>
+
+    <div class="wf-section-header">
+      <div>
+        <div class="wf-page-title">Community Members</div>
+        <div class="wf-subtitle">245 members in your area</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <input class="wf-input" style="width:200px" placeholder="Search by name...">
+        <select class="wf-select" style="width:auto">
+          <option>Sort: Newest</option>
+          <option>Sort: Most Active</option>
+          <option>Sort: Highest Rated</option>
+          <option>Sort: Highest Trust</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+      <button class="wf-toggle-btn active" style="border:2px solid var(--border)">All Tiers</button>
+      <button class="wf-toggle-btn" style="border:2px solid var(--border)">🥇 Gold</button>
+      <button class="wf-toggle-btn" style="border:2px solid var(--border)">🥈 Silver</button>
+      <button class="wf-toggle-btn" style="border:2px solid var(--border)">🥉 Bronze</button>
+    </div>
+
+    <div class="wf-grid wf-grid-3">
+
+      <!-- User Card 1 -->
+      <div class="wf-card">
+        <div class="wf-card-body">
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px">
+            <div class="wf-avatar" style="width:44px;height:44px;font-size:14px;flex-shrink:0">SJ</div>
+            <div style="flex:1;min-width:0">
+              <div class="wf-card-title">Sarah Johnson</div>
+              <div class="wf-card-meta">Northside · Member Jan 2024</div>
+              <div class="wf-stars" style="margin-top:2px">★★★★★ <span>4.9</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="wf-tag tier">🥈 Silver</span>
+            <span class="wf-tag">150 pts</span>
+          </div>
+          <!-- Trust bar -->
+          <div style="font-size:10px;color:#777;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div class="wf-trust-bar" style="flex:1"><div class="wf-trust-fill" style="width:85%"></div></div>
+            <span style="font-size:11px;font-weight:bold">85</span>
+          </div>
+          <div style="font-size:11px;color:#666;margin-bottom:10px">8 items listed · 12 exchanges completed</div>
+          <button class="wf-btn sm" style="width:100%" onclick="showPage('profile', document.querySelectorAll('#page-nav button')[5])">View Profile</button>
+        </div>
+      </div>
+
+      <!-- User Card 2 -->
+      <div class="wf-card">
+        <div class="wf-card-body">
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px">
+            <div class="wf-avatar" style="width:44px;height:44px;font-size:14px;flex-shrink:0">MD</div>
+            <div style="flex:1;min-width:0">
+              <div class="wf-card-title">Mike Davis</div>
+              <div class="wf-card-meta">Westfield · Member Mar 2024</div>
+              <div class="wf-stars" style="margin-top:2px">★★★★☆ <span>4.2</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="wf-tag tier">🥉 Bronze</span>
+            <span class="wf-tag">75 pts</span>
+          </div>
+          <div style="font-size:10px;color:#777;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div class="wf-trust-bar" style="flex:1"><div class="wf-trust-fill" style="width:62%"></div></div>
+            <span style="font-size:11px;font-weight:bold">62</span>
+          </div>
+          <div style="font-size:11px;color:#666;margin-bottom:10px">5 items listed · 6 exchanges completed</div>
+          <button class="wf-btn sm" style="width:100%">View Profile</button>
+        </div>
+      </div>
+
+      <!-- User Card 3 -->
+      <div class="wf-card">
+        <div class="wf-card-body">
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px">
+            <div class="wf-avatar" style="width:44px;height:44px;font-size:14px;flex-shrink:0">PT</div>
+            <div style="flex:1;min-width:0">
+              <div class="wf-card-title">Priya Thambiran</div>
+              <div class="wf-card-meta">Eastbourne · Member Nov 2023</div>
+              <div class="wf-stars" style="margin-top:2px">★★★★★ <span>5.0</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="wf-tag tier" style="background:#ffd;border-color:#bb9">🥇 Gold</span>
+            <span class="wf-tag">340 pts</span>
+          </div>
+          <div style="font-size:10px;color:#777;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div class="wf-trust-bar" style="flex:1"><div class="wf-trust-fill" style="width:97%"></div></div>
+            <span style="font-size:11px;font-weight:bold">97</span>
+          </div>
+          <div style="font-size:11px;color:#666;margin-bottom:10px">14 items listed · 31 exchanges completed</div>
+          <button class="wf-btn sm" style="width:100%">View Profile</button>
+        </div>
+      </div>
+
+      <!-- User Card 4 -->
+      <div class="wf-card">
+        <div class="wf-card-body">
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px">
+            <div class="wf-avatar" style="width:44px;height:44px;font-size:14px;flex-shrink:0">AK</div>
+            <div style="flex:1;min-width:0">
+              <div class="wf-card-title">Aisha Karim</div>
+              <div class="wf-card-meta">Lakeside · Member Feb 2024</div>
+              <div class="wf-stars" style="margin-top:2px">★★★★★ <span>4.7</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="wf-tag tier">🥈 Silver</span>
+            <span class="wf-tag">190 pts</span>
+          </div>
+          <div style="font-size:10px;color:#777;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div class="wf-trust-bar" style="flex:1"><div class="wf-trust-fill" style="width:78%"></div></div>
+            <span style="font-size:11px;font-weight:bold">78</span>
+          </div>
+          <div style="font-size:11px;color:#666;margin-bottom:10px">9 items listed · 17 exchanges completed</div>
+          <button class="wf-btn sm" style="width:100%">View Profile</button>
+        </div>
+      </div>
+
+      <!-- User Card 5 -->
+      <div class="wf-card">
+        <div class="wf-card-body">
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px">
+            <div class="wf-avatar" style="width:44px;height:44px;font-size:14px;flex-shrink:0">JL</div>
+            <div style="flex:1;min-width:0">
+              <div class="wf-card-title">James Liu</div>
+              <div class="wf-card-meta">Hilltop · Member Jun 2024</div>
+              <div class="wf-stars" style="margin-top:2px">★★★☆☆ <span>3.8</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="wf-tag tier">🥉 Bronze</span>
+            <span class="wf-tag">50 pts</span>
+          </div>
+          <div style="font-size:10px;color:#777;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div class="wf-trust-bar" style="flex:1"><div class="wf-trust-fill" style="width:44%"></div></div>
+            <span style="font-size:11px;font-weight:bold">44</span>
+          </div>
+          <div style="font-size:11px;color:#666;margin-bottom:10px">3 items listed · 4 exchanges completed</div>
+          <button class="wf-btn sm" style="width:100%">View Profile</button>
+        </div>
+      </div>
+
+      <!-- User Card 6 -->
+      <div class="wf-card">
+        <div class="wf-card-body">
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px">
+            <div class="wf-avatar" style="width:44px;height:44px;font-size:14px;flex-shrink:0">TW</div>
+            <div style="flex:1;min-width:0">
+              <div class="wf-card-title">Tom Walsh</div>
+              <div class="wf-card-meta">Riverside · Member Apr 2024</div>
+              <div class="wf-stars" style="margin-top:2px">★★★★☆ <span>4.4</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <span class="wf-tag tier">🥈 Silver</span>
+            <span class="wf-tag">120 pts</span>
+          </div>
+          <div style="font-size:10px;color:#777;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div class="wf-trust-bar" style="flex:1"><div class="wf-trust-fill" style="width:71%"></div></div>
+            <span style="font-size:11px;font-weight:bold">71</span>
+          </div>
+          <div style="font-size:11px;color:#666;margin-bottom:10px">6 items listed · 10 exchanges completed</div>
+          <button class="wf-btn sm" style="width:100%">View Profile</button>
+        </div>
+      </div>
+
+    </div><!-- end grid -->
+
+    <div class="wf-pagination">
+      <button class="wf-page-btn">‹‹</button>
+      <button class="wf-page-btn active">1</button>
+      <button class="wf-page-btn">2</button>
+      <button class="wf-page-btn">3</button>
+      <button class="wf-page-btn">…</button>
+      <button class="wf-page-btn">12</button>
+      <button class="wf-page-btn">››</button>
+    </div>
+  </div>
+
+  <div class="wf-footer">About | How It Works | Safety Tips | Contact | Terms | Privacy · © 2025 ShareLocal</div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PAGE 6 — USER PROFILE
+══════════════════════════════════════ -->
+<div class="page" id="page-profile">
+
+  <nav class="wf-nav">
+    <div class="wf-logo">ShareLocal</div>
+    <div class="wf-nav-links">
+      <a class="wf-nav-link" onclick="showPage('users', document.querySelectorAll('#page-nav button')[4])">← Community Members</a>
+    </div>
+    <div class="wf-nav-right">
+      <span style="font-size:18px;cursor:pointer">🔔</span>
+      <div class="wf-avatar">SJ ▾</div>
+    </div>
+  </nav>
+
+  <div class="wf-page-content">
+    <div class="wf-annotations">
+      <strong>📍 Page: User Profile (Sprint 3 Required)</strong>
+      <ul>
+        <li>Profile header: avatar, name, location, member since, trust score bar</li>
+        <li>Tier badge (Bronze / Silver / Gold) and total points prominently shown</li>
+        <li>Badges preview row — earned through platform activity (e.g. "Fast Responder", "10 Exchanges")</li>
+        <li>Stats strip: items listed, exchanges, rating average</li>
+        <li>Bottom section: user's active listings grid</li>
+        <li>If viewing own profile: "Edit Profile" button appears</li>
+      </ul>
+    </div>
+
+    <!-- PROFILE HEADER -->
+    <div class="wf-profile-header">
+      <div class="wf-avatar-lg">SJ</div>
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+          <div>
+            <h1 style="font-size:20px;font-weight:bold;margin-bottom:2px">Sarah Johnson</h1>
+            <div style="font-size:12px;color:#666;margin-bottom:6px">📍 Northside · Member since January 2024</div>
+            <div class="wf-stars" style="font-size:13px">★★★★★ <span>4.9 average from 32 ratings</span></div>
+          </div>
+          <div style="text-align:right">
+            <button class="wf-btn outline sm">Edit Profile</button>
+            <div style="font-size:10px;color:#888;margin-top:4px">(only shown to profile owner)</div>
+          </div>
+        </div>
+
+        <!-- Trust Score -->
+        <div style="margin-top:14px">
+          <div style="font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:5px">Trust Score</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="wf-trust-bar" style="flex:1;height:10px"><div class="wf-trust-fill" style="width:85%"></div></div>
+            <span style="font-size:18px;font-weight:bold">85 / 100</span>
+          </div>
+        </div>
+
+        <!-- Tier + Points -->
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center">
+          <span class="wf-tag tier" style="font-size:12px;padding:5px 12px">🥈 Silver Tier</span>
+          <span class="wf-tag" style="font-size:12px;padding:5px 12px">💎 150 Points</span>
+          <span style="font-size:11px;color:#777">Next tier: Gold at 250 pts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="wf-stats" style="margin-bottom:20px">
+      <div class="wf-stat-box"><div class="wf-stat-num">8</div><div class="wf-stat-lbl">Items Listed</div></div>
+      <div class="wf-stat-box"><div class="wf-stat-num">12</div><div class="wf-stat-lbl">Exchanges Done</div></div>
+      <div class="wf-stat-box"><div class="wf-stat-num">4.9</div><div class="wf-stat-lbl">Avg Rating</div></div>
+      <div class="wf-stat-box"><div class="wf-stat-num">150</div><div class="wf-stat-lbl">Points Earned</div></div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="wf-card" style="margin-bottom:20px">
+      <div class="wf-card-body">
+        <div class="wf-section-title" style="margin-bottom:12px">Badges Earned</div>
+        <div class="wf-badges">
+          <div class="wf-badge">🏆 10 Exchanges</div>
+          <div class="wf-badge">⚡ Fast Responder</div>
+          <div class="wf-badge">⭐ Top Rated</div>
+          <div class="wf-badge">📋 5 Listings</div>
+          <div class="wf-badge">🌱 Early Member</div>
+          <div class="wf-badge" style="background:var(--tag-bg);color:#aaa;border-style:dashed">🔒 Locked Badge</div>
+          <div class="wf-badge" style="background:var(--tag-bg);color:#aaa;border-style:dashed">🔒 Locked Badge</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS: Listings / Reviews -->
+    <div class="wf-tabs">
+      <button class="wf-tab active" onclick="switchTab('listings',this)">Active Listings (8)</button>
+      <button class="wf-tab" onclick="switchTab('reviews',this)">Reviews (32)</button>
+    </div>
+
+    <!-- LISTINGS TAB -->
+    <div id="profile-tab-listings">
+      <div class="wf-grid wf-grid-4">
+        <div class="wf-card" style="cursor:pointer" onclick="showPage('detail', document.querySelectorAll('#page-nav button')[2])">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Cordless Drill</div>
+            <div class="wf-tag exchange" style="font-size:10px">Lending</div>
+          </div>
+        </div>
+        <div class="wf-card" style="cursor:pointer">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Stats Textbook</div>
+            <div class="wf-tag exchange" style="font-size:10px">Swap</div>
+          </div>
+        </div>
+        <div class="wf-card" style="cursor:pointer">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Yoga Mat</div>
+            <div class="wf-tag exchange" style="font-size:10px">Lending</div>
+          </div>
+        </div>
+        <div class="wf-card" style="cursor:pointer">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Desk Lamp</div>
+            <div class="wf-tag exchange" style="font-size:10px">Giveaway</div>
+          </div>
+        </div>
+        <div class="wf-card" style="cursor:pointer">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Bike Helmet</div>
+            <div class="wf-tag exchange" style="font-size:10px">Lending</div>
+          </div>
+        </div>
+        <div class="wf-card" style="cursor:pointer">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Camping Stove</div>
+            <div class="wf-tag exchange" style="font-size:10px">Lending</div>
+          </div>
+        </div>
+        <div class="wf-card" style="cursor:pointer">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Bread Maker</div>
+            <div class="wf-tag exchange" style="font-size:10px">Swap</div>
+          </div>
+        </div>
+        <div class="wf-card" style="cursor:pointer">
+          <div class="wf-img" style="height:100px">[ PHOTO ]</div>
+          <div class="wf-card-body">
+            <div class="wf-card-title" style="font-size:12px">Kids Scooter</div>
+            <div class="wf-tag exchange" style="font-size:10px">Giveaway</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS TAB (hidden by default) -->
+    <div id="profile-tab-reviews" style="display:none">
+      <div class="wf-request-card">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <strong style="font-size:13px">Mike Davis</strong>
+          <span class="wf-stars">★★★★★</span>
+        </div>
+        <div style="font-size:11px;color:#666;margin-bottom:5px">Exchange: Garden Tool Set · 3 weeks ago</div>
+        <div style="font-size:12px">Sarah was fantastic — item was exactly as described and she was very flexible with pickup. Would definitely borrow again!</div>
+      </div>
+      <div class="wf-request-card">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <strong style="font-size:13px">Aisha Karim</strong>
+          <span class="wf-stars">★★★★★</span>
+        </div>
+        <div style="font-size:11px;color:#666;margin-bottom:5px">Exchange: Cordless Drill · 1 month ago</div>
+        <div style="font-size:12px">Great experience. Sarah responded quickly and the drill came with all accessories. 10/10.</div>
+      </div>
+      <div class="wf-request-card">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <strong style="font-size:13px">Tom Walsh</strong>
+          <span class="wf-stars">★★★★☆</span>
+        </div>
+        <div style="font-size:11px;color:#666;margin-bottom:5px">Exchange: Yoga Mat · 6 weeks ago</div>
+        <div style="font-size:12px">Smooth exchange, very communicative. Item was clean and in good condition.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="wf-footer">About | How It Works | Safety Tips | Contact | Terms | Privacy · © 2025 ShareLocal</div>
+</div>
+
+
+<!-- ── SCRIPTS ── -->
+<script>
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.querySelectorAll('#page-nav button').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function toggleView(mode) {
+    const grid = document.getElementById('browse-grid');
+    const map  = document.getElementById('browse-map');
+    const gBtn = document.getElementById('grid-toggle');
+    const mBtn = document.getElementById('map-toggle');
+    if (mode === 'grid') {
+      grid.style.display = ''; map.style.display = 'none';
+      gBtn.classList.add('active'); mBtn.classList.remove('active');
+    } else {
+      grid.style.display = 'none'; map.style.display = '';
+      mBtn.classList.add('active'); gBtn.classList.remove('active');
+    }
+  }
+
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.wf-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('profile-tab-listings').style.display = (tab === 'listings') ? '' : 'none';
+    document.getElementById('profile-tab-reviews').style.display  = (tab === 'reviews')  ? '' : 'none';
+  }
+
+  // close modal on overlay click
+  document.getElementById('request-modal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
