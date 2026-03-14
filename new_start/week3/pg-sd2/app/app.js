@@ -20,10 +20,10 @@ app.get("/", function(req, res) {
 // ex 2: create a new route with path /roehampton which should send the text hello roehampton
 // to the user when they request the url 3000/roehampton
 
-app.get("/roehampton", function (req, res) {
-    res.send("Hello. Roehampton.");
-    // console.log("this is also a test but in other page");
-})
+// app.get("/roehampton", function (req, res) {
+//     res.send("Hello. Roehampton.");
+//     // console.log("this is also a test but in other page");
+// });
 
 // ex 4: createa a var and capture the request path
 // and send only the first 3 letters out to the browser
@@ -31,6 +31,31 @@ app.get("/exercise4", function(req, res) {
     console.log(req.url);
     let path = req.url;
     res.send(path.substring(5));
+});
+
+// additional tasks use the roehampton route, capture the request and remove / and reverse
+app.get("/roehampton", function(req, res) {
+    const word = req.url;
+    let array = [];
+    for (let c of word) {
+        array.push(c);
+    }
+    // res.send(array);
+    // remove the leading /
+    array.shift();
+
+    // reverse the elements
+    array.reverse();
+
+    console.log(array);
+    // res.send(array);
+
+    // join them back to a word
+    const reversed = array.join("");
+    res.send(`
+        ${array} - removed <br>${reversed} - reversed
+        `);
+    console.log(reversed);
 });
 
 // Create a route for testing the db
@@ -46,10 +71,15 @@ app.get("/db_test", function(req, res) {
 // ex 5 (Dynamic routing)
 app.get("/db_test/:id", function(req, res) {
     const id = req.params.id;
-    sql = "select * from test_table where id=?";
-    db.query(sql).then(results => {
+    sql = "select * from test_table where id = ?";
+    db.query(sql, [id]).then(results => {
         console.log(results);
-        res.send("this must be seen in the website brother " + results);
+        res.send(`
+            <h1> Student</h1>
+            <p>ID: ${results[0].id}</p>
+            <p>Name: ${results[0].name}</p>
+            
+        `);
     });
 });
 
@@ -113,6 +143,24 @@ app.get("/student/table/:name/:id", function(req, res) {
 
 });
 
+// additional task 2
+// Create a dynamic route where the user may request /number/:n 
+// where n is any number. Output all the numbers from 0 to the number 
+// entered, formatted in an HTML table
+app.get("/number/:n", function(req, res) {
+    const num = Number(req.params.n);
+    let html = "<table border = 1>";
+
+    for (let i = 0; i <= num; i++) {
+        html += "<tr>" +
+                    "<td>" + i + "</td>" +
+                "</tr>";
+    }
+    html += "</table>";
+    console.log(html);
+    res.send(html);
+
+});
 
 
 // Start server on port 3000
