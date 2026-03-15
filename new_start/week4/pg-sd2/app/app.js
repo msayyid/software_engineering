@@ -214,6 +214,7 @@ app.get("/all-modules", function(req, res) {
                 select * from modules`;
     db.query(sql).then(results => {
         res.send(results);
+        // res.json(results);
         console.log("all modules, mate");
         console.log(results);
     });
@@ -244,15 +245,41 @@ app.get("/all-modules-formatted", function(req, res) {
     });
 });
 
-// now createa a single-module page showing a module title,
+// now create a single-module page showing a module title,
 // its programme and all the students for that module
 app.get("/single-module/:code", function(req, res) {
     const code = req.params.code;
+    // to get programme name i need to connect modules.code with programme_modules.module
+    // and get based on programme_modules.programme get programmes.name
     const sql = `
-                select m.name, m.code, p.name, s.name
-                from 
+                select m.name as module_title, m.code as module_code, p.name as programme_name, s.name as student_name
+                from modules m
+                join programme_modules pm on m.code = pm.module
+                join programmes p on p.id = pm.programme
+                join student_programme sp on sp.programme = pm.programme
+                join students s on s.id = sp.id
+                where m.code = ?
     `;
-})
+    db.query(sql, [code]).then(results => {
+        let html = `<h1>Module Code: ${results[0].module_code}<br>Module Title: ${results[0].module_title}</h1>
+                    <table border = 1>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Programme Name</th>
+                        </tr>
+        `;
+        for (let row of results) {
+            html += `<tr>
+                        <td>${row.student_name}</td>
+                        <td>${row.programme_name}</td>
+                     </tr>`;
+        }
+        html += `</table>`;
+        res.send(html);
+        console.log("bro i am working");
+        console.log(html);
+    });
+});
 
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
