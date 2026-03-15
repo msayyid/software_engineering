@@ -1,0 +1,19 @@
+extends layout 
+block content 
+    .main-content 
+    h1 Single Module Page with Students
+    h2 Module Code: #{data[0].module_code}
+    h2 Module Title: #{data[0].module_title}
+
+    table(border = 1)
+        tr 
+            th 
+                b Student Name
+            th 
+                b Programme Name 
+
+        for row in data
+            tr 
+                td #{row.student_name}
+                td #{row.programme_name} 
+                
