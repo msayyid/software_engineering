@@ -17,6 +17,11 @@ app.set("views", "./app/views");
 // Get the functions in the db.js file to use
 const db = require('./services/db');
 
+// create a static web page using pug
+app.get("/my-static-page", function(req, res) {
+    res.render("my-static-page");
+});
+
 // Create a route for root - /
 app.get("/", function(req, res) {
     
