@@ -57,21 +57,32 @@ app.get("/all-students-formatted", function(req, res) {
 });
 
 // for week 7, reconstruction with classes
+// Route: /single-student/:id
+// Handles request to view a single student's details
 app.get("/single-student/:id", async function(req, res) {
+
+    // Extract student id from URL parameter
     let stId = req.params.id;
 
-    // create a student class with id passed
+    // Create a Student object using the id
     let student = new Student(stId);
-    await student.getStudentName();
-    await student.getStudentProgramme();
-    await student.getStudentModules();
-    console.log("i think the student object is created");
-    console.log(student);
-    res.render("student", {
-        student:student
-    });
-    console.log(student.modules);
 
+    // Load student data from database
+    await student.getStudentName();        // load name
+    await student.getStudentProgramme();   // load programme
+    await student.getStudentModules();     // load modules
+
+    // Debug: check loaded student object
+    console.log("student object created:");
+    console.log(student);
+
+    // Render the view and pass student object to Pug
+    res.render("student", {
+        student: student
+    });
+
+    // Debug: check modules list
+    console.log(student.modules);
 });
 
 
@@ -102,34 +113,11 @@ app.get("/single-programme/:id", async function(req, res) {
     let id = req.params.id;
     let programme = new Programme(id);
     await programme.getProgrammeName();
+    await programme.getProgrammeModules();
     console.log("programme object is created");
     res.render("programme", {
         programme:programme
     })
-    // const id = req.params.id;
-
-    // const sql = `
-    //         -- Get all modules that belong to a specific programme
-    //         select m.code, m.name
-    //         from programme_modules pm   -- linking table between programmes and modules
-    //         join modules m on pm.module = m.code   -- connect module code to module details
-    //         where pm.programme = ?      -- filter modules for the selected programme
-    // `;
-
-    // const programSql = `
-    //         -- Get programme information (id and name)
-    //         select p.id, p.name
-    //         from programmes p
-    //         where p.id = ?              -- select the requested programme
-    // `;
-    // db.query(programSql, [id]).then(results1 => {
-    //     db.query(sql, [id]).then(results2 => {
-    //         res.render("single-programme", {
-    //             data1:results1,
-    //             data2:results2
-    //         });
-    //     });
-    // });
     
 });
 
@@ -161,28 +149,13 @@ app.get("/all-modules-formatted", function(req, res) {
 app.get("/single-module/:code", async function(req, res) {
     const code = req.params.code;
     let module = new Module(code);
-    await module.getModuleName(code);
+    await module.getModuleName();
+    await module.getModuleStudents();
     console.log("i think the module object is created");
+    console.log(module);
     res.render("module", {
         module: module
     })
-    // const code = req.params.code;
-    // // to get programme name i need to connect modules.code with programme_modules.module
-    // // and get based on programme_modules.programme get programmes.name
-    // const sql = `
-    //             select m.name as module_title, m.code as module_code, p.name as programme_name, s.name as student_name
-    //             from modules m
-    //             join programme_modules pm on m.code = pm.module
-    //             join programmes p on p.id = pm.programme
-    //             join student_programme sp on sp.programme = pm.programme
-    //             join students s on s.id = sp.id
-    //             where m.code = ?
-    // `;
-    // db.query(sql, [code]).then(results => {
-    //     res.render("single-module", {
-    //         data:results
-    //     });
-    // });
 });
 
 // Create a route for testing the db

@@ -5,3 +5,16 @@ block content
     br
     p 
         b there's gonna be more 
+    b a list of modules with codes related to this program 
+    ul 
+        table(border=2) 
+            tr 
+                th module code 
+                th module name 
+            each module in programme.modules 
+                tr 
+                    td #{module.code}
+                    td #{module.name} 
+    
+    p this should work now
+            

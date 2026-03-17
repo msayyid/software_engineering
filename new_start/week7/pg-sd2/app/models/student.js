@@ -16,57 +16,87 @@ class Student {
         this.id = id;
     }
 
+    // Load student's name from database
     async getStudentName() {
-        console.log("getstudentname method is actually getting called");
-        // if name is not loaded yet, load it
+
+        // Debug: confirm method is called
+        console.log("getStudentName called");
+
+        // Only fetch if name is not already loaded
         if (typeof this.name !== "string") {
+
+            // Query student by id
             let sql = `select * from students where id = ?`;
+
+            // Execute query with this student's id
             const results = await db.query(sql, [this.id]);
+
+            // Store name in the object
             this.name = results[0].name;
         }
-
     }
 
+
+    // Load student's programme (id + name)
     async getStudentProgramme() {
+
+        // Only fetch if programme is not already loaded
         if (!this.programme) {
-            const sql = `select s.name as student,
-                         ps.name as programme, ps.id as code
-                         from students s
-                         join student_programme sp on sp.id = s.id
-                         join programmes ps on ps.id = sp.programme
-                         where s.id = ?`;
-            console.log("i am running");
-            const result1 = await db.query(sql, [this.id]);
-            const name = result1[0].programme;
-            const pCode = result1[0].code;
+
+            // Query to get programme linked to this student
+            const sql = `
+                select s.name as student,
+                    ps.name as programme,
+                    ps.id as code
+                from students s
+                join student_programme sp on sp.id = s.id
+                join programmes ps on ps.id = sp.programme
+                where s.id = ?
+            `;
+
+            // Execute query
+            const result = await db.query(sql, [this.id]);
+
+            // Extract programme data
+            const name = result[0].programme;
+            const pCode = result[0].code;
+
+            // Create Programme object and assign values
             const programme = new Programme(pCode);
             programme.name = name;
-            this.programme = programme;
-            // const pCode = result1[0].code;
-            // const result2 = await db.query(modSql, [pCode]);
-            // this.programme.push(result2[0]);
-            // this.programme = new Programme(pCode);
-        }
 
+            // Attach programme to student
+            this.programme = programme;
+        }
     }
 
-    async getStudentModules()  {
+
+    // Load all modules for the student's programme
+    async getStudentModules() {
+
+        // Only fetch if modules are not already loaded
         if (this.modules.length === 0) {
+
+            // Query modules linked to the programme
             const modSql = `
-                            select * from programme_modules pm
-                                     join modules m on m.code = pm.module
-                                     where programme = ?`;
+                select * from programme_modules pm
+                join modules m on m.code = pm.module
+                where programme = ?
+            `;
+
+            // Execute query using programme id
             const result = await db.query(modSql, [this.programme.id]);
-            const pCode = this.programme.id;
-            // let mod = new Module(this.programme.id);
+
+            // Convert each DB row into a Module object
             for (let row of result) {
-                const module = new Module(row.code);
-                module.name = row.name;
-                this.modules.push(row);
-                // this.modules.push()
+
+                const module = new Module(row.code); // create module
+                module.name = row.name;              // assign name
+
+                // Add module to student's modules list
+                this.modules.push(module);
             }
         }
-
     }
 
 }
