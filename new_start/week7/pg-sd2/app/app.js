@@ -63,11 +63,14 @@ app.get("/single-student/:id", async function(req, res) {
     // create a student class with id passed
     let student = new Student(stId);
     await student.getStudentName();
+    await student.getStudentProgramme();
+    await student.getStudentModules();
     console.log("i think the student object is created");
     console.log(student);
     res.render("student", {
         student:student
     });
+    console.log(student.modules);
 
 });
 
