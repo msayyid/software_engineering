@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Mar 17, 2026 at 10:38 AM
+-- Generation Time: Mar 18, 2026 at 11:21 AM
 -- Server version: 9.6.0
 -- PHP Version: 8.3.26
 
@@ -35,17 +35,6 @@ CREATE TABLE `categories` (
   `listing_count` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `categories`
---
-
-INSERT INTO `categories` (`category_id`, `category_name`, `description`, `icon`, `listing_count`) VALUES
-(1, 'Weapons', 'Swords, spears, axes and combat tools', 'icon-weapons.png', 0),
-(2, 'Armor', 'Protective gear used in battle', 'icon-armor.png', 0),
-(3, 'Transport', 'Horses, chariots and movement equipment', 'icon-transport.png', 0),
-(4, 'Artifacts', 'Historical or rare collectible items', 'icon-artifacts.png', 0),
-(5, 'Accessories', 'Extra equipment and utility items', 'icon-accessories.png', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -72,27 +61,6 @@ CREATE TABLE `listings` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `listings`
---
-
-INSERT INTO `listings` (`listing_id`, `user_id`, `category_id`, `title`, `description`, `exchange_type`, `condition_status`, `condition_notes`, `photo_url_1`, `photo_url_2`, `photo_url_3`, `swap_preferences`, `is_available`, `view_count`, `request_count`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'Sword of Kufa', 'Historical styled sword', 'swap', 'good', 'Minor scratches', NULL, NULL, NULL, 'Looking for shield', 1, 10, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(2, 2, 2, 'Battle Armor', 'Used in many battles', 'lending', 'fair', 'Heavy wear', NULL, NULL, NULL, NULL, 1, 25, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(3, 3, 1, 'Crusader Shield', 'Strong defensive shield', 'swap', 'like_new', NULL, NULL, NULL, NULL, 'Sword preferred', 1, 15, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(4, 4, 3, 'Horse Saddle', 'Comfortable saddle', 'giveaway', 'good', NULL, NULL, NULL, NULL, NULL, 1, 5, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(5, 5, 2, 'Ottoman Helmet', 'Steel helmet', 'swap', 'fair', 'Rust spots', NULL, NULL, NULL, NULL, 1, 8, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(6, 6, 1, 'Roman Gladius', 'Short sword', 'lending', 'good', NULL, NULL, NULL, NULL, NULL, 1, 30, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(7, 7, 2, 'Legion Armor', 'Roman armor', 'swap', 'fair', 'Used condition', NULL, NULL, NULL, 'Better armor', 1, 12, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(8, 8, 3, 'War Chariot', 'Two horse chariot', 'swap', 'well_used', 'Old but functional', NULL, NULL, NULL, NULL, 1, 20, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(9, 9, 1, 'Imperial Dagger', 'Decorative dagger', 'giveaway', 'like_new', NULL, NULL, NULL, NULL, NULL, 1, 7, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(10, 10, 2, 'Shield of Rome', 'Heavy shield', 'lending', 'good', NULL, NULL, NULL, NULL, NULL, 1, 18, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(11, 11, 1, 'Persian Spear', 'Long spear', 'swap', 'good', NULL, NULL, NULL, NULL, NULL, 1, 14, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(12, 12, 2, 'Royal Armor', 'Elite armor', 'lending', 'like_new', NULL, NULL, NULL, NULL, NULL, 1, 22, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(13, 13, 3, 'War Elephant Gear', 'Used in battles', 'swap', 'fair', 'Damaged parts', NULL, NULL, NULL, NULL, 1, 9, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(14, 14, 1, 'Legendary Sword', 'Mythical blade', 'giveaway', 'well_used', 'Ancient relic', NULL, NULL, NULL, NULL, 1, 11, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30'),
-(15, 15, 2, 'Battle Axe', 'Heavy axe', 'swap', 'good', NULL, NULL, NULL, NULL, NULL, 1, 16, 0, '2026-03-17 10:28:30', '2026-03-17 10:28:30');
-
 -- --------------------------------------------------------
 
 --
@@ -103,35 +71,6 @@ CREATE TABLE `listing_tags` (
   `listing_id` int NOT NULL,
   `tag_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `listing_tags`
---
-
-INSERT INTO `listing_tags` (`listing_id`, `tag_id`) VALUES
-(1, 1),
-(6, 1),
-(1, 2),
-(3, 2),
-(10, 2),
-(2, 3),
-(5, 3),
-(8, 3),
-(3, 4),
-(11, 4),
-(14, 4),
-(2, 5),
-(7, 5),
-(15, 5),
-(4, 6),
-(9, 7),
-(14, 7),
-(5, 8),
-(13, 8),
-(6, 9),
-(10, 9),
-(12, 9),
-(8, 10);
 
 -- --------------------------------------------------------
 
@@ -150,27 +89,6 @@ CREATE TABLE `messages` (
   `sent_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `messages`
---
-
-INSERT INTO `messages` (`message_id`, `sender_id`, `receiver_id`, `request_id`, `listing_id`, `content`, `is_read`, `sent_at`) VALUES
-(1, 1, 2, 1, NULL, 'Hey, I sent you a request', 0, '2026-03-17 10:34:05'),
-(2, 2, 1, 1, NULL, 'Got it, will check', 1, '2026-03-17 10:34:05'),
-(3, 3, 4, 2, NULL, 'Is the armor still available?', 0, '2026-03-17 10:34:05'),
-(4, 4, 3, 2, NULL, 'Yes, it is', 1, '2026-03-17 10:34:05'),
-(5, 5, 6, NULL, 3, 'Interested in your listing', 0, '2026-03-17 10:34:05'),
-(6, 6, 5, NULL, 3, 'Sure, let’s discuss', 1, '2026-03-17 10:34:05'),
-(7, 7, 8, NULL, 6, 'Can you lower the price?', 0, '2026-03-17 10:34:05'),
-(8, 8, 7, NULL, 6, 'Maybe slightly', 1, '2026-03-17 10:34:05'),
-(9, 9, 10, 5, NULL, 'Request cancelled?', 0, '2026-03-17 10:34:05'),
-(10, 10, 9, 5, NULL, 'Yes, sorry', 1, '2026-03-17 10:34:05'),
-(11, 11, 12, NULL, NULL, 'Hello there!', 0, '2026-03-17 10:34:05'),
-(12, 12, 11, NULL, NULL, 'Hi!', 1, '2026-03-17 10:34:05'),
-(13, 13, 14, 10, NULL, 'I completed the trade', 1, '2026-03-17 10:34:05'),
-(14, 14, 13, 10, NULL, 'Great, thanks', 1, '2026-03-17 10:34:05'),
-(15, 15, 1, NULL, 15, 'Still available?', 0, '2026-03-17 10:34:05');
-
 -- --------------------------------------------------------
 
 --
@@ -186,28 +104,7 @@ CREATE TABLE `ratings` (
   `comment` text,
   `rating_type` enum('as_lender','as_borrower','as_swapper','as_giver','as_receiver') NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ;
-
---
--- Dumping data for table `ratings`
---
-
-INSERT INTO `ratings` (`rating_id`, `request_id`, `rater_id`, `rated_id`, `score`, `comment`, `rating_type`, `created_at`) VALUES
-(1, 1, 2, 1, 5, 'Great experience', 'as_borrower', '2026-03-17 10:32:44'),
-(2, 2, 3, 2, 4, 'Good but late return', 'as_lender', '2026-03-17 10:32:44'),
-(3, 3, 4, 3, 3, 'Fair trade', 'as_swapper', '2026-03-17 10:32:44'),
-(4, 4, 5, 4, 5, 'Excellent condition', 'as_receiver', '2026-03-17 10:32:44'),
-(5, 5, 6, 5, 2, 'Not as described', 'as_borrower', '2026-03-17 10:32:44'),
-(6, 6, 7, 6, 5, 'Perfect transaction', 'as_lender', '2026-03-17 10:32:44'),
-(7, 7, 8, 7, 4, 'Smooth swap', 'as_swapper', '2026-03-17 10:32:44'),
-(8, 8, 9, 8, 3, 'Average experience', 'as_receiver', '2026-03-17 10:32:44'),
-(9, 9, 10, 9, 5, 'Highly recommended', 'as_giver', '2026-03-17 10:32:44'),
-(10, 10, 11, 10, 4, 'Good quality item', 'as_borrower', '2026-03-17 10:32:44'),
-(11, 11, 12, 11, 5, 'Very reliable', 'as_lender', '2026-03-17 10:32:44'),
-(12, 12, 13, 12, 3, 'Okay experience', 'as_receiver', '2026-03-17 10:32:44'),
-(13, 13, 14, 13, 4, 'Good communication', 'as_swapper', '2026-03-17 10:32:44'),
-(14, 14, 15, 14, 2, 'Item worn out', 'as_borrower', '2026-03-17 10:32:44'),
-(15, 15, 1, 15, 5, 'Excellent trade', 'as_giver', '2026-03-17 10:32:44');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -229,27 +126,6 @@ CREATE TABLE `requests` (
   `owner_notes` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `requests`
---
-
-INSERT INTO `requests` (`request_id`, `requester_id`, `listing_id`, `status`, `message`, `requested_duration`, `swap_offer_description`, `requested_date`, `responded_date`, `completed_date`, `owner_notes`) VALUES
-(1, 2, 1, 'pending', 'Interested in your sword', '3 days', NULL, '2026-03-17 10:30:58', NULL, NULL, NULL),
-(2, 3, 2, 'accepted', 'Can I borrow this armor?', '1 week', NULL, '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL, 'Handle with care'),
-(3, 4, 3, 'declined', 'Swap for my shield?', NULL, 'Offering shield', '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL, 'Not interested'),
-(4, 5, 4, 'completed', 'Need this saddle', '2 days', NULL, '2026-03-17 10:30:58', '2026-03-17 10:30:58', '2026-03-17 10:30:58', 'Returned in good condition'),
-(5, 6, 5, 'cancelled', 'Helmet request', NULL, NULL, '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL, NULL),
-(6, 7, 6, 'pending', 'Interested in gladius', '5 days', NULL, '2026-03-17 10:30:58', NULL, NULL, NULL),
-(7, 8, 7, 'accepted', 'Swap armor?', NULL, 'Offering upgraded armor', '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL, NULL),
-(8, 9, 8, 'declined', 'Chariot request', NULL, NULL, '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL, 'Too risky'),
-(9, 10, 9, 'completed', 'Dagger looks great', NULL, NULL, '2026-03-17 10:30:58', '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL),
-(10, 11, 10, 'pending', 'Shield request', '2 days', NULL, '2026-03-17 10:30:58', NULL, NULL, NULL),
-(11, 12, 11, 'accepted', 'Interested in spear', NULL, NULL, '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL, NULL),
-(12, 13, 12, 'completed', 'Armor needed urgently', '4 days', NULL, '2026-03-17 10:30:58', '2026-03-17 10:30:58', '2026-03-17 10:30:58', 'Good borrower'),
-(13, 14, 13, 'pending', 'Elephant gear request', NULL, NULL, '2026-03-17 10:30:58', NULL, NULL, NULL),
-(14, 15, 14, 'declined', 'Sword swap offer', NULL, 'Offering axe', '2026-03-17 10:30:58', '2026-03-17 10:30:58', NULL, 'Not equal value'),
-(15, 1, 15, 'pending', 'Battle axe request', '1 day', NULL, '2026-03-17 10:30:58', NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -261,22 +137,6 @@ CREATE TABLE `tags` (
   `tag_name` varchar(255) NOT NULL,
   `usage_count` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `tags`
---
-
-INSERT INTO `tags` (`tag_id`, `tag_name`, `usage_count`) VALUES
-(1, 'rare', 0),
-(2, 'antique', 0),
-(3, 'battle_used', 0),
-(4, 'legendary', 0),
-(5, 'heavy', 0),
-(6, 'lightweight', 0),
-(7, 'collectible', 0),
-(8, 'damaged', 0),
-(9, 'premium', 0),
-(10, 'vintage', 0);
 
 -- --------------------------------------------------------
 
@@ -305,27 +165,6 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`, `first_name`, `last_name`, `bio`, `location`, `latitude`, `longitude`, `profile_pic`, `points`, `average_rating`, `total_ratings`, `items_lent`, `items_borrowed`, `items_given`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'ali@history.com', 'hashed_pw', 'Ali', 'Ibn Abi Talib', 'Fourth caliph and warrior', 'Kufa', 32.0303000, 44.4009000, 'default-avatar.png', 120, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(2, 'khalid@history.com', 'hashed_pw', 'Khalid', 'Ibn Al-Walid', 'Sword of Allah', 'Mecca', 21.3891000, 39.8579000, 'default-avatar.png', 150, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(3, 'salahuddin@history.com', 'hashed_pw', 'Salahuddin', 'Ayyubi', 'Leader of the Muslim forces in Crusades', 'Jerusalem', 31.7683000, 35.2137000, 'default-avatar.png', 200, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(4, 'tariq@history.com', 'hashed_pw', 'Tariq', 'Ibn Ziyad', 'Conqueror of Al-Andalus', 'Tangier', 35.7595000, -5.8340000, 'default-avatar.png', 130, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(5, 'mehmed@history.com', 'hashed_pw', 'Mehmed', 'II', 'Ottoman conqueror of Constantinople', 'Istanbul', 41.0082000, 28.9784000, 'default-avatar.png', 180, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(6, 'caesar@rome.com', 'hashed_pw', 'Julius', 'Caesar', 'Roman general and dictator', 'Rome', 41.9028000, 12.4964000, 'default-avatar.png', 170, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(7, 'scipio@rome.com', 'hashed_pw', 'Scipio', 'Africanus', 'Defeated Hannibal', 'Rome', 41.9028000, 12.4964000, 'default-avatar.png', 140, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(8, 'maximus@rome.com', 'hashed_pw', 'Maximus', 'Decimus', 'Fictional Roman general', 'Rome', 41.9028000, 12.4964000, 'default-avatar.png', 110, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(9, 'augustus@rome.com', 'hashed_pw', 'Augustus', 'Octavian', 'First Roman emperor', 'Rome', 41.9028000, 12.4964000, 'default-avatar.png', 160, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(10, 'aurelian@rome.com', 'hashed_pw', 'Aurelian', 'Emperor', 'Restored Roman Empire', 'Rome', 41.9028000, 12.4964000, 'default-avatar.png', 145, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(11, 'cyrus@persia.com', 'hashed_pw', 'Cyrus', 'The Great', 'Founder of Achaemenid Empire', 'Persia', 29.9350000, 52.8916000, 'default-avatar.png', 200, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(12, 'darius@persia.com', 'hashed_pw', 'Darius', 'The Great', 'Persian king', 'Persepolis', 29.9350000, 52.8916000, 'default-avatar.png', 175, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(13, 'xerxes@persia.com', 'hashed_pw', 'Xerxes', 'I', 'Persian king in Greco-Persian wars', 'Persia', 29.9350000, 52.8916000, 'default-avatar.png', 160, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(14, 'rostam@persia.com', 'hashed_pw', 'Rostam', 'Zal', 'Legendary Persian hero', 'Zabulistan', 31.0000000, 61.0000000, 'default-avatar.png', 155, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45'),
-(15, 'nadir@persia.com', 'hashed_pw', 'Nadir', 'Shah', 'Persian ruler and conqueror', 'Mashhad', 36.2605000, 59.6168000, 'default-avatar.png', 185, 0.00, 0, 0, 0, 0, 1, '2026-03-17 10:11:45', '2026-03-17 10:11:45');
 
 --
 -- Indexes for dumped tables
@@ -402,19 +241,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `category_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `listings`
 --
 ALTER TABLE `listings`
-  MODIFY `listing_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `listing_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `message_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `message_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ratings`
@@ -426,19 +265,19 @@ ALTER TABLE `ratings`
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `request_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `request_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `tag_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `tag_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
