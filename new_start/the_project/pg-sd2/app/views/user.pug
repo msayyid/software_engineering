@@ -1,16 +1,23 @@
 extends layout 
 block content 
-    .main_content  
-        h1 this is a single user page for #{user.user_id} - #{user.first_name}  #{user.last_name}
-        h2 and this is a line for the user email address - #{user.email}
+    .main-content  
+        h1 User Profile Page
+        h1 User ID: #{user.user_id}
+        h1 User Name: #{user.first_name}  #{user.last_name}
+        h1 User Email Address: #{user.email}
         br
-        h3 here is the whole data
+
+        h2 Detailed Data for #{user.first_name} #{user.last_name}
+        - const hiddentFields = ['created_at', 'latitude', 'longitude', 'updated_at', 'password_hash']
         table(border=1)
             tr 
                 th Field 
                 th Value 
         
             each value, key in user 
-                tr 
-                    td #{key}
-                    td #{value} 
+                if !hiddentFields.includes(key)
+                    tr 
+                        td #{key}
+                        td #{value} 
+
+        h3 Joined On #{user.formatted_created_at}

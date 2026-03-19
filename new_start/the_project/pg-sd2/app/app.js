@@ -5,7 +5,7 @@ const express = require("express");
 var app = express();
 
 // Add static files location
-app.use(express.static("static"));
+app.use(express.static("app/static"));
 
 // Get the functions in the db.js file to use
 const db = require('./services/db');
@@ -14,13 +14,17 @@ const db = require('./services/db');
 app.set("view engine", "pug");
 app.set("views", "./app/views");
 
+
 // load user class (model)
 const { User } = require("./models/user");
+const { Listing } = require("./models/listing");
 
 // Create a route for root - /
 app.get("/", function(req, res) {
     res.send("Hello world!");
 });
+
+// users
 
 app.get("/all-users-formatted", async function(req, res) {
     const sql = `select * from users`;
@@ -42,6 +46,29 @@ app.get("/single-user/:id", async function(req, res) {
     });
     console.log("now i need to be seeing a user with a givn id");
     console.log(user);
+});
+
+// listings
+
+app.get("/all-listings-formatted", async function(req, res) {
+    const sql = `select l.*, c.category_name
+                        from listings l
+                        join categories c on l.category_id = c.category_id`;
+    const result = await db.query(sql);
+    res.render("all-listings-formatted", {
+        listings:result
+    });
+    console.log(result);
+});
+
+app.get("/listing-detail/:listing_id", async function (req, res){
+    const listing_id = req.params.listing_id;
+    let listing = new Listing(listing_id);
+    await listing.getListingData();
+    res.render("listing-detail", {
+        listing:listing
+    });
+    console.log(listing);
 });
 
 app.get("/project_db_test", async function (req, res) {
@@ -84,3 +111,9 @@ app.get("/hello/:name", function(req, res) {
 app.listen(3000,function(){
     console.log(`Server running at http://127.0.0.1:3000/`);
 });
+
+// questions:
+// regarding the multiple database queries 
+// i am calling one in for example in models (user, listing)
+// and one more to get all the data in app.js (all-users-formatted, etc) 
+// is this how it is supposed to be? could we optimize it?

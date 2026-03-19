@@ -1,0 +1,28 @@
+extends layout 
+block content 
+    .main-content 
+        h1 All Listings 
+        for listing in listings 
+            .listing-box
+                h3
+                    a(href=`./listing-detail/${listing.listing_id}`) #{listing.title}
+                p Category: #{listing.category_name}
+                p Description: #{listing.description}
+                p Exchange Type: #{listing.exchange_type} 
+                p Condition: #{listing.condition_status} 
+                p Available: #{listing.is_available ? "Yes" : "No"}
+                p Created: #{listing.created_at.toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"})}
+
+
+        //- h1 Item Listings 
+        
+        //- h2 One item in one table for now 
+        //- for listing in listings 
+        //-     table(border=1)
+        //-         tr 
+        //-             th field 
+        //-             th value 
+        //-         for val, key in listing 
+        //-             tr 
+        //-                 td #{key}
+        //-                 td #{val} 

@@ -21,6 +21,8 @@ class User {
     is_active;
     created_at;
     updated_at;
+    formatted_created_at;
+    formatted_updated_at;
 
     constructor(user_id) {
         this.user_id = user_id;
@@ -36,6 +38,8 @@ class User {
         // result is an array of rows → we take the first row (since user_id is unique)
         // result[0] contains all columns from the users table
         const row = result[0];
+        this.formatted_created_at = row.created_at.toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"});
+        this.formatted_updated_at = row.updated_at.toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"});
 
         if (!row) {
             throw new Error("User not found");

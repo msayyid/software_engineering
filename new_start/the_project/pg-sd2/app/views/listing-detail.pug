@@ -1,0 +1,77 @@
+extends layout
+
+block content
+    .main-content
+        h2 The Detail Page for the Listing
+        h2 Full Detail Page For: #{listing.title}
+
+        table(border=1)
+            tr
+                th Field
+                th Value
+
+            tr
+                td Listing ID
+                td= listing.listing_id
+
+            tr
+                td Title
+                td= listing.title
+
+            tr
+                td Owner
+                td= listing.first_name
+
+            tr
+                td Category
+                td= listing.category_name
+
+            tr
+                td Description
+                td= listing.description
+
+            tr
+                td Exchange Type
+                td= listing.exchange_type
+
+            tr
+                td Condition Status
+                td= listing.condition_status
+
+            tr
+                td Condition Notes
+                td= listing.condition_notes || "None"
+
+            tr
+                td Available
+                td= listing.is_available ? "Yes" : "No"
+
+            tr
+                td Created At
+                td= listing.formatted_created_at
+
+            tr
+                td Updated At
+                td= listing.formatted_updated_at
+        //- table(border=1)
+        //-     tr 
+        //-         th Listing ID
+        //-         th Name 
+        //-         th Owner
+        //-         th Category 
+        //-         th Description 
+        //-         th Exchange Type 
+        //-         th Condition Status 
+        //-         th Condition Notes 
+        //-         th Available
+        //-         th Created at 
+        //-     tr 
+        //-         td #{listing.listing_id}
+        //-         td #{listing.name}
+        //-         td #{listing.user_id} 
+        //-         td #{listing.category_name} 
+        //-         td #{listing.description} 
+        //-         td #{listing.exchange_type} 
+        //-         td #{listing.condition_status} 
+        //-         td #{listing.is_available ? "Yes" : "No"} 
+        //-         td #{listing.created_at} 

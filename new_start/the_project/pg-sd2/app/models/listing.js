@@ -1,0 +1,50 @@
+const db = require("./../services/db");
+
+class Listing {
+    // attributes
+    listing_id;
+    user_id;
+    category_id;
+    title;
+    description;
+    exchange_type; // [lending, giveaway, swap]
+    condition_status;
+    condition_notes;
+    photo_url_1;
+    photo_url_2;
+    photo_url_3;
+    swap_preferences;
+    is_available; // boolean
+    view_count;
+    request_count;
+    created_at;
+    updated_at;
+    category_name;
+    first_name;
+    formatted_created_at;
+    formatted_updated_at;
+
+    // constructor
+    constructor(listing_id) {
+        this.listing_id = listing_id;
+    }
+
+    // methods
+    async getListingData() {
+        const sql = `select l.*, c.category_name, u.first_name
+                            from listings l
+                            join categories c on l.category_id = c.category_id
+                            join users u on u.user_id = l.user_id
+                            where l.listing_id = ?`;
+
+        const result = await db.query(sql, [this.listing_id]);
+        this.formatted_created_at = result[0].created_at.toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"});
+        this.formatted_updated_at = result[0].updated_at.toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"});
+        if (!result[0]) {
+            throw new Error("Listing not found");
+        }
+        Object.assign(this, result[0]);
+    }
+}
+
+module.exports = {Listing}
