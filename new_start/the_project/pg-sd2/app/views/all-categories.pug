@@ -1,0 +1,34 @@
+extends layout 
+block content 
+    .main-content 
+        h1 Categories 
+        .categories-container 
+            each category in categories 
+                .category-card 
+                    h2
+                        a(href=`./all-categories/${category.category_id}`) #{category.category_name }
+                    if category.description 
+                        p=category.description 
+                    else 
+                        p No description Available
+                    if category.icon 
+                        p=category.icon 
+                    else 
+                        p No icon available
+                    p Listing count: #{category.listing_count}
+
+        //- table(border=1)
+        //-     tr  
+        //-         th Category ID 
+        //-         th Category Name 
+        //-         th Description 
+        //-         th icon 
+        //-         th listing_count 
+
+        //-     for category in categories 
+        //-         tr 
+        //-             td=category.category_id 
+        //-             td=category.category_name 
+        //-             td=category.description 
+        //-             td=category.icon 
+        //-             td=category.listing_count

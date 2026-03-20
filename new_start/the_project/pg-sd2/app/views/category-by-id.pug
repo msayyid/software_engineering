@@ -1,0 +1,18 @@
+extends layout 
+block content 
+    .main-content 
+        h1 Listings For Category #{listings[0].category_name}
+        //- p #{listings[0].category_name}
+        //- - console.log("testing category-by-id pug")
+        .listings-container
+            each listing in listings    
+                .listing-box
+                    h3
+                        a(href=`/listing-detail/${listing.listing_id}`) #{listing.title }
+                    p Description: #{listing.description}
+                    p Exchange Type: #{listing.exchange_type}
+                    p Condition Status: #{listing.condition_status}
+                    //- p Condition Notes: #{listing.condition_notes}
+                    p Available: #{listing.is_available ? "Yes" : "No"}
+                     
+

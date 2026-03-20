@@ -18,6 +18,7 @@ app.set("views", "./app/views");
 // load user class (model)
 const { User } = require("./models/user");
 const { Listing } = require("./models/listing");
+const { Category } = require("./models/category");
 
 // Create a route for root - /
 app.get("/", function(req, res) {
@@ -69,6 +70,27 @@ app.get("/listing-detail/:listing_id", async function (req, res){
         listing:listing
     });
     console.log(listing);
+});
+
+// categories
+app.get("/all-categories", async function(req, res) {
+    const categories = await Category.getAllCategories();
+    res.render("all-categories", {
+        categories:categories
+    });
+    console.log("i am checking whether categories loading or not");
+    console.log(categories);
+});
+
+app.get("/all-categories/:id", async function(req, res) {
+    const category_id = req.params.id;
+    const listings = await Listing.getListingsByCategoryId(category_id);
+    res.render("category-by-id", {
+        listings:listings
+    });
+    console.log("this is what i need");
+    console.log(listings);
+
 });
 
 app.get("/project_db_test", async function (req, res) {

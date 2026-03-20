@@ -45,6 +45,16 @@ class Listing {
         }
         Object.assign(this, result[0]);
     }
+
+    static async getListingsByCategoryId(category_id) {
+        const sql = `select l.*, c.category_name 
+                            from listings l
+                            join categories c on c.category_id = l.category_id
+                            where l.category_id=?`;
+        const result = await db.query(sql, [category_id]);
+        
+        return result;
+    }
 }
 
 module.exports = {Listing}
