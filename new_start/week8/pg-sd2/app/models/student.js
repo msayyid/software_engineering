@@ -11,19 +11,21 @@ class Student {
     programme;
     modules = []; // modules
 
+    note;
+
     // constructor
     constructor(id) {
         this.id = id;
     }
 
     // Load student's name from database
-    async getStudentName() {
+    async getStudentDetails() {
 
         // Debug: confirm method is called
-        console.log("getStudentName called");
+        console.log("getStudentDetails called");
 
         // Only fetch if name is not already loaded
-        if (typeof this.name !== "string") {
+        if (typeof this.name !== "string" && typeof this.note !== "string") {
 
             // Query student by id
             let sql = `select * from students where id = ?`;
@@ -33,6 +35,7 @@ class Student {
 
             // Store name in the object
             this.name = results[0].name;
+            this.note = results[0].note;
         }
     }
 
@@ -98,6 +101,42 @@ class Student {
             }
         }
     }
+
+    // add student note
+    async addStudentNote(note) {
+        const sql = "update students set note = ? where students.id = ?";
+        const result = await db.query(sql, [note, this.id]);
+        // ensure the note property in the model is up to date
+        this.note = note;
+        return result;
+    }
+
+    // remove the record from the student_programme table
+    async deleteStudentProgramme(programme) {
+        const sql = "delete from student_programme where id = ?";
+        const result = await db.query(sql, [this.id]);
+        this.programme = "";
+        return result;
+    }
+
+    // add a new recrod to the student_programme table
+    async addStudentProgramme(programme) {
+        const sql = "insert into student_programme (id, programme) values (?, ?)";
+        const result = db.query(sql, [this.id, programme]);
+
+        this.programme = programme;
+        return result;
+    }
+
+    async updateStudentProgramme(programme) {
+        const existing = await this.getStudentProgramme();
+        if (this.programme) {
+            await this.deleteStudentProgramme(programme);
+        }
+        await this.addStudentProgramme(programme);
+
+    }
+
 
 }
 

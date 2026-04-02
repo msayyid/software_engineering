@@ -59,6 +59,19 @@ class Programme {
             console.log(this.modules);
         }
     }
+
+    static async getAllProgrammes() {
+        const sql = "select * from programmes";
+        const results = await db.query(sql);
+        
+        let rows = [];
+        for (let row of results) {
+            let prog = new Programme(row.id);
+            await prog.getProgrammeName();
+            rows.push(prog)
+        }
+        return rows;
+    }
 }
 
 module.exports = {

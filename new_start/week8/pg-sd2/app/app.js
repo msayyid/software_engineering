@@ -17,6 +17,9 @@ app.set("views", "./app/views");
 // Get the functions in the db.js file to use
 const db = require('./services/db');
 
+// enable post usage
+app.use(express.urlencoded({ extended: true}));
+
 // get the student model
 const { Student } = require( "./models/student");
 
@@ -68,9 +71,13 @@ app.get("/single-student/:id", async function(req, res) {
     let student = new Student(stId);
 
     // Load student data from database
-    await student.getStudentName();        // load name
+    await student.getStudentDetails();        // load name
     await student.getStudentProgramme();   // load programme
     await student.getStudentModules();     // load modules
+
+    // load all programmes for programme selection and alteration
+    const resultProgs = await Programme.getAllProgrammes();
+
 
     // Debug: check loaded student object
     console.log("student object created:");
@@ -78,11 +85,46 @@ app.get("/single-student/:id", async function(req, res) {
 
     // Render the view and pass student object to Pug
     res.render("student", {
-        student: student
+        student: student,
+        programmes:resultProgs
     });
 
     // Debug: check modules list
     console.log(student.modules);
+});
+
+// POST route to recieve new data for a students' programme
+app.post("/allocate-programme", function(req, res) {
+    // console.log("I am now in /allocate-programme page");
+
+    let student = new Student(req.body.id);
+    try {
+        student.updateStudentProgramme(req.body.programme).then(result => {
+            res.redirect("/single-student/" + req.body.id);
+        });
+    } catch(err) {
+        console.error("Error while adding programme", err.message);
+    }
+    console.log(req.body);
+
+    // res.send("form submitted");
+
+});
+
+// POST for /add-note route
+app.post("/add-note", function(req, res) {
+    let student = new Student(req.body.id);
+    try {
+        student.addStudentNote(req.body.note).then(result => {
+            // res.send("form submitted");
+            res.redirect("/single-student/" + req.body.id);
+        });
+        // console.log("I am console logging the notes itself");
+        console.log(req.body);
+    } catch (err) {
+        console.error("Error while adding note", err.message);
+    }
+    // res.send("form submitted");
 });
 
 
