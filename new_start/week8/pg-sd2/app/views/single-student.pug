@@ -1,0 +1,24 @@
+extends layout 
+block content 
+    //- - console.log("i am here and probably working");
+    //- - console.log("here's my data 1:");
+    //- - console.log(data1)
+    //- - console.log("___!!!!! some space");
+    //- - console.log("here's my data2");
+    - console.log(data2);
+    div Student: #[b #{data1[0].student}]
+    
+
+    div #[br] Programme: #[b #{data1[0].programme}]
+    br
+    table(border = 1)
+        tr
+            th 
+                b Module Code 
+            th 
+                b Module Name 
+        for item in data2
+            tr
+                td #{item.module}   
+                td #{item.name}
+            

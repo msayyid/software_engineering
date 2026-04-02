@@ -1,0 +1,13 @@
+extends layout 
+block content 
+    //- h1 this is all the data #{student}
+    h1 Student page for: #{student.name}
+    p the id for the student is: #{student.id} 
+    p later on we will be able to display the programme and modules 
+    p this is a placeholder for the student programme id #{student.programme.id} name : #{student.programme.name}
+    br
+    br
+    p this is modules: 
+    ul
+        each module in student.modules  
+                li #{module.code} - #{module.name}
