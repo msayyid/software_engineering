@@ -57,6 +57,16 @@ class User{
         }
     }
 
+    static async getUserDetails(id) {
+        const sql = `select u.id, u.email, s.*
+                            from users u
+                            join students s on s.id = u.id
+                            where u.id = ?`;
+        const result = await db.query(sql, [id]);
+        console.log(result);
+        return result;
+    }
+
 
 }
 

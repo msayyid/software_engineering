@@ -1,0 +1,11 @@
+extends layout 
+block content 
+    h1 Welcome Page 
+    h1 Hi, #{user[0].name} 
+    h2 Welcome to the welcome page of yours "PERSONALIZED"
+
+    div 
+        H3 Your Details 
+        p Email address: #{user[0].email}
+        p Name: #{user[0].name} 
+        p Note: #{user[0].note} 

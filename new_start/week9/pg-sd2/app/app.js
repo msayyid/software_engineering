@@ -287,6 +287,24 @@ app.get("/logout", function(req, res) {
 });
 
 
+// welcome page for a user
+app.get("/welcome", async function (req, res) {
+    if (req.session.loggedIn) {
+        // return res.send("Please login first");
+        const uId = req.session.uId;
+        const user = await User.getUserDetails(uId);
+        res.render("welcome-page", {
+            user:user
+        });
+
+    } else {
+        // user not logged in
+        res.redirect("/login");
+    }
+
+});
+
+
 // independent tasks
 // ex 1, provide a json output of all programs
 app.get("/all-programmes", function(req, res) {
