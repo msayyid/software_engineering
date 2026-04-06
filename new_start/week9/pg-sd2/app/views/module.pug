@@ -1,0 +1,16 @@
+extends layout 
+block content 
+    h1 Module Page For: #{module.name}
+    h2 Module Code/ID: #{module.code}
+    h3 This page contains the names of students and their programmes that are of the module #{module.name}
+    p 
+        b we'll do more in here 
+    
+    table(border = 2)
+        tr 
+            th Student Name 
+            th Programme Name 
+        each item in module.students 
+            tr 
+                td #{item.student}
+                td #{item.programme}

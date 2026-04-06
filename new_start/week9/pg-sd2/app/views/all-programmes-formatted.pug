@@ -1,0 +1,15 @@
+extends layout 
+block content 
+    .main-content
+    h1 #[b] All Programmes Formatted 
+    table(border = 1)
+        tr 
+            th 
+                b Programme ID 
+            th 
+                b Programme Name 
+        for item in data
+            tr 
+                td #{item.id}
+                td 
+                    a(href="./single-programme/" + item.id) #{item.name}

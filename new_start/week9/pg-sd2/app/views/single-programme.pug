@@ -1,0 +1,19 @@
+extends layout 
+block content 
+    .main-content 
+    h1 
+        b Single Programme Page
+        br
+    h2
+        b #{data1[0].id}: #{data1[0].name}
+
+    table(border=1)
+        tr 
+            th 
+                b Module Code 
+            th 
+                b Module Name 
+        for item in data2   
+            tr  
+                td #{item.code} 
+                td #{item.name}
